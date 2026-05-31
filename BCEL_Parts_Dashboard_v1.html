@@ -275,7 +275,7 @@ tbody tr:last-child td{border-bottom:none;}
     <span id="liveWrap" style="display:none;align-items:center;gap:5px;font-size:11px;color:#6ee7b7;font-weight:700;">
       <span class="live-dot"></span>LIVE
     </span>
-    <button class="btn btn-teal" onclick="pickFile()">🔄 Refresh Data</button>
+    <button class="btn btn-teal" id="btnRefresh" onclick="loadFromGSheets()">🔄 Refresh Data</button>
     <button class="btn btn-navy" id="btnAR" style="display:none" onclick="toggleAR()">⏸ Auto-Refresh</button>
     <button class="btn btn-amber" onclick="exportXLSX()">⬇ Excel</button>
     <button class="btn btn-red" onclick="window.print()">⬇ PDF</button>
@@ -565,16 +565,15 @@ let GY='', GM='';
 let fsaHandle=null, arTimer=null;
 const FSA = 'showOpenFilePicker' in window;
 
+// ═══ GOOGLE SHEETS CONFIG ═══
+const GSHEET_ID = '1CoEJRvy3BnGybYbiElSthNHeScFfhJAw';
+
 // ═══════════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', () => {
-  DET = DETAIL_DATA;
-  populateGlobalYears();
   updateTs();
-  applyGlobal();
-  renderAll();
-  if (FSA) document.getElementById('btnAR').style.display = 'inline-flex';
+  loadFromGSheets();
 });
 
 function populateGlobalYears() {
@@ -1114,6 +1113,122 @@ function render_pr(){
 // FILE REFRESH
 // ═══════════════════════════════════════════════
 let pendingBuf=null;
+// ═══════════════════════════════════════════════
+// GOOGLE SHEETS LIVE LOAD
+// ═══════════════════════════════════════════════
+function parseCSV(text){
+  const rows=[];
+  let cur='',inQ=false,row=[];
+  for(let i=0;i<text.length;i++){
+    const c=text[i];
+    if(c==='"'){if(inQ&&text[i+1]==='"'){cur+='"';i++;}else inQ=!inQ;}
+    else if(c===','&&!inQ){row.push(cur);cur='';}
+    else if((c==='\n'||c==='\r')&&!inQ){
+      row.push(cur);rows.push(row);row=[];cur='';
+      if(c==='\r'&&text[i+1]==='\n')i++;
+    }else cur+=c;
+  }
+  if(cur||row.length){row.push(cur);rows.push(row);}
+  return rows.filter(r=>r.some(c=>c!==''));
+}
+
+async function loadFromGSheets(){
+  const btn=document.getElementById('btnRefresh');
+  if(btn){btn.textContent='⏳ Loading...';btn.disabled=true;}
+  const sheetNames=[
+    'Support Part Request to BCEL',
+    'BCEL Return part failed to MIC',
+    'MIC Pending to support BCEL',
+    'BCEL part pending Return to MIC'
+  ];
+  try{
+    const results=await Promise.all(sheetNames.map(name=>
+      fetch(`https://docs.google.com/spreadsheets/d/${GSHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(name)}`)
+        .then(r=>{if(!r.ok)throw new Error(`Cannot load sheet: ${name}`);return r.text();})
+        .then(parseCSV)
+    ));
+    parseFromArrays(results[0],results[1],results[2],results[3]);
+    document.getElementById('liveWrap').style.display='inline-flex';
+  }catch(e){
+    console.error(e);
+    toast('⚠️ Google Sheets load failed: '+e.message+'. Try uploading Excel manually.');
+  }finally{
+    if(btn){btn.textContent='🔄 Refresh Data';btn.disabled=false;}
+  }
+}
+
+function parseFromArrays(ws2,ws4,ws3,ws5){
+  function si(v){try{return parseInt(String(v).replace(/,/g,''))||0}catch{return 0}}
+  function iso(v){if(!v)return'';const d=new Date(v);return isNaN(d)?String(v):d.toISOString();}
+  function gk(v){if(!v)return'';const d=new Date(v);if(isNaN(d))return'';
+    return d.getFullYear()+'-'+(d.getMonth()+1).toString().padStart(2,'0');}
+  const dm={},rm={},dp={},prp={},prg={};
+  let dr=[],rr=[],ps=[],pr=[];
+
+  ws2.slice(1).forEach(r=>{
+    if(!r[0]||r[0]==='Ticket')return;
+    const k=gk(r[1]),qty=si(r[6])||1,pn=String(r[4]||'').trim();
+    if(k)dm[k]=(dm[k]||0)+qty; if(pn)dp[pn]=(dp[pn]||0)+qty;
+    dr.push({ticket:String(r[0]),date:iso(r[1]),serial:String(r[2]||''),part_code:String(r[3]||''),
+      part_name:pn,store:String(r[5]||''),qty,purpose:String(r[7]||''),receiver:String(r[10]||'')});
+  });
+
+  ws4.slice(1).forEach(r=>{
+    if(!r[0]||r[0]==='Ticket')return;
+    const k=gk(r[1]),qty=si(r[6])||1,pn=String(r[4]||'').trim();
+    if(k)rm[k]=(rm[k]||0)+qty;
+    rr.push({ticket:String(r[0]),date:iso(r[1]),from:String(r[2]||''),part_code:String(r[3]||''),
+      part_name:pn,store:String(r[5]||''),qty,purpose:String(r[7]||''),remark:String(r[8]||'')});
+  });
+
+  ws3.slice(3).forEach(r=>{
+    if(!r[0]||String(r[0]).trim()==='NO')return;
+    ps.push({no:r[0],date:String(r[1]||''),ref:String(r[2]||''),branch:String(r[3]||''),
+      atm_type:String(r[4]||''),serial:String(r[5]||''),part:String(r[7]||''),
+      qty:si(r[8])||1,remark:String(r[9]||'')});
+  });
+
+  ws5.slice(1).forEach(r=>{
+    if(!r[0]||String(r[0]).trim()==='Sender')return;
+    const qty=si(r[5]),pn=String(r[3]||'').trim(),pg2=String(r[12]||'Other').trim();
+    if(pn)prp[pn]=(prp[pn]||0)+qty; if(pg2)prg[pg2]=(prg[pg2]||0)+qty;
+    pr.push({sender:String(r[0]||''),part_code:String(r[2]||''),part_name:pn,
+      date:iso(r[4]),qty,serial:String(r[6]||''),address:String(r[7]||''),
+      store:String(r[9]||''),part_group:pg2});
+  });
+
+  const srt=o=>Object.fromEntries(Object.entries(o).sort((a,b)=>b[1]-a[1]));
+  const parsed={
+    dispatch_rows:dr,return_rows:rr,pending_support:ps,pending_return:pr,
+    dispatch_monthly:dm,return_monthly:rm,
+    top_dispatch_parts:Object.entries(dp).sort((a,b)=>b[1]-a[1]).slice(0,10),
+    top_pending_return_parts:Object.entries(prp).sort((a,b)=>b[1]-a[1]).slice(0,10),
+    pending_return_groups:srt(prg)
+  };
+
+  DET=parsed;
+  SUMMARY.dispatch_monthly=DET.dispatch_monthly;
+  SUMMARY.return_monthly=DET.return_monthly;
+  SUMMARY.total_dispatch=Object.values(DET.dispatch_monthly||{}).reduce((a,b)=>a+b,0);
+  SUMMARY.total_return=Object.values(DET.return_monthly||{}).reduce((a,b)=>a+b,0);
+  SUMMARY.total_pending_support=DET.pending_support.length;
+  SUMMARY.total_pending_return_qty=DET.pending_return.reduce((a,r)=>a+r.qty,0);
+  SUMMARY.total_pending_return_items=DET.pending_return.length;
+  SUMMARY.top_dispatch_parts=DET.top_dispatch_parts;
+  SUMMARY.top_pending_return_parts=DET.top_pending_return_parts;
+  SUMMARY.pending_return_groups=DET.pending_return_groups;
+
+  ['d_F','d_T','r_F','r_T','pr_F','pr_T','d_Q','r_Q','ps_Q','pr_Q'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.value='';
+  });
+  document.getElementById('gY').value='';
+  document.getElementById('gM').value='';
+  GY='';GM='';
+  Object.keys(pg).forEach(k=>pg[k]=0);
+  populateGlobalYears();renderKPIs();renderCharts();checkAlert();renderAll();updateTs();
+  toast(`✅ Live data loaded: ${dr.length.toLocaleString()} dispatched · ${rr.length.toLocaleString()} returned · ${pr.length.toLocaleString()} pending return`);
+}
+
 async function pickFile(){
   if(FSA){
     try{
