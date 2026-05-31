@@ -566,7 +566,14 @@ let fsaHandle=null, arTimer=null;
 const FSA = 'showOpenFilePicker' in window;
 
 // ═══ GOOGLE SHEETS CONFIG ═══
-const GSHEET_ID = '1CoEJRvy3BnGybYbiElSthNHeScFfhJAw';
+const GSHEET_PUB_ID = '2PACX-1vRpp7z8Qab8b11WCPjeZ6caHNUiH5S9yIM-YEZbB-7e5JsXg2toF4D3LHUuuq13Aw';
+const GSHEET_GIDS = {
+  support_request : '477754753',
+  return_failed   : '101182698',
+  pending_support : '1518485322',
+  pending_return  : '225577236'
+};
+function gsPubCSV(gid){ return `https://docs.google.com/spreadsheets/d/e/${GSHEET_PUB_ID}/pub?gid=${gid}&single=true&output=csv`; }
 
 // ═══════════════════════════════════════════════
 // INIT
@@ -1135,18 +1142,21 @@ function parseCSV(text){
 async function loadFromGSheets(){
   const btn=document.getElementById('btnRefresh');
   if(btn){btn.textContent='⏳ Loading...';btn.disabled=true;}
-  const sheetNames=[
-    'Support Part Request to BCEL',
-    'BCEL Return part failed to MIC',
-    'MIC Pending to support BCEL',
-    'BCEL part pending Return to MIC'
-  ];
+  const PROXY='https://corsproxy.io/?';
+  async function fetchCSV(gid){
+    const url=gsPubCSV(gid);
+    // try direct first, fallback to proxy
+    try{
+      const r=await fetch(url,{credentials:'omit'});
+      if(r.ok){const t=await r.text();if(t.trim())return parseCSV(t);}
+    }catch(e){}
+    const r2=await fetch(PROXY+encodeURIComponent(url),{credentials:'omit'});
+    if(!r2.ok)throw new Error(`Cannot load gid: ${gid}`);
+    return parseCSV(await r2.text());
+  }
   try{
-    const results=await Promise.all(sheetNames.map(name=>
-      fetch(`https://docs.google.com/spreadsheets/d/${GSHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(name)}`)
-        .then(r=>{if(!r.ok)throw new Error(`Cannot load sheet: ${name}`);return r.text();})
-        .then(parseCSV)
-    ));
+    const gids=Object.values(GSHEET_GIDS);
+    const results=await Promise.all(gids.map(gid=>fetchCSV(gid)));
     parseFromArrays(results[0],results[1],results[2],results[3]);
     document.getElementById('liveWrap').style.display='inline-flex';
   }catch(e){
