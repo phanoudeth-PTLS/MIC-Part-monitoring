@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>BCEL ATM Parts Monitoring</title>
+<title>BCEL ATM Parts Monitoring v2</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
@@ -259,6 +259,84 @@ tbody tr:last-child td{border-bottom:none;}
 @media print{.hdr,.gbar,.ftr,.btn,.modal-bg{display:none!important;}
   .tab-panel{display:block!important;}.main{padding:0;}
   .kpi{break-inside:avoid;}.card{break-inside:avoid;}}
+
+/* ═══ SETTINGS MODAL ═══ */
+.smodal-bg{position:fixed;inset:0;background:rgba(15,22,66,.65);backdrop-filter:blur(6px);
+  z-index:500;display:flex;align-items:center;justify-content:center;}
+.smodal-bg.hidden{display:none;}
+.smodal{background:#fff;border-radius:18px;padding:28px;width:520px;max-width:96vw;
+  box-shadow:0 20px 60px rgba(0,0,0,.25);}
+.smodal h2{font-size:17px;font-weight:800;color:var(--navy);margin-bottom:6px;}
+.smodal p{font-size:13px;color:var(--gray);margin-bottom:16px;}
+.smodal label{font-size:12px;font-weight:800;color:var(--navy);letter-spacing:.5px;display:block;margin-bottom:5px;}
+.smodal input[type=text]{width:100%;padding:10px 14px;border:1.5px solid var(--lgray);border-radius:9px;
+  font-size:13px;font-weight:500;outline:none;transition:border-color .15s;}
+.smodal input[type=text]:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(13,148,136,.15);}
+.smodal-footer{display:flex;gap:10px;justify-content:flex-end;margin-top:18px;}
+.smodal-row{display:flex;align-items:center;gap:10px;margin-top:14px;}
+.smodal-row label{margin:0;flex:0 0 auto;white-space:nowrap;}
+.smodal-row select{padding:8px 12px;border:1.5px solid var(--lgray);border-radius:9px;font-size:13px;
+  font-weight:600;color:var(--navy);background:#fff;cursor:pointer;outline:none;}
+.smodal-row select:focus{border-color:var(--teal);}
+.s-status{font-size:12px;padding:7px 13px;border-radius:8px;background:#f0fdf4;
+  border:1px solid #bbf7d0;color:#15803d;font-weight:700;margin-top:10px;display:none;}
+
+/* ═══ GLOBAL SEARCH ═══ */
+.gsearch-wrap{position:relative;display:flex;align-items:center;}
+.gsearch-wrap input{padding:8px 36px 8px 34px;border:1.5px solid var(--lgray);border-radius:9px;
+  font-size:13px;font-weight:500;color:var(--navy);background:#fff;outline:none;width:220px;
+  transition:border-color .15s,width .2s;}
+.gsearch-wrap input:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(13,148,136,.15);width:280px;}
+.gsearch-wrap .sico{position:absolute;left:10px;font-size:14px;pointer-events:none;}
+.gsearch-wrap .sclr{position:absolute;right:9px;background:none;border:none;cursor:pointer;
+  font-size:14px;color:var(--gray);padding:0;line-height:1;display:none;}
+.gsearch-wrap input:not(:placeholder-shown) ~ .sclr{display:block;}
+.gsearch-res{position:absolute;top:calc(100% + 6px);left:0;right:0;background:#fff;
+  border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.15);border:1px solid var(--lgray);
+  max-height:320px;overflow-y:auto;z-index:200;display:none;}
+.gsearch-res.show{display:block;}
+.gsr-group{padding:6px 14px 2px;font-size:10px;font-weight:800;letter-spacing:1.5px;
+  text-transform:uppercase;color:var(--teal);background:#f8faff;border-bottom:1px solid var(--lgray);}
+.gsr-row{padding:8px 14px;font-size:13px;cursor:pointer;border-bottom:1px solid #f1f5f9;
+  display:flex;gap:10px;align-items:baseline;}
+.gsr-row:hover{background:#f0f9ff;}
+.gsr-row:last-child{border-bottom:none;}
+.gsr-ticket{font-weight:800;color:var(--navy);flex:0 0 auto;}
+.gsr-part{color:var(--gray);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.gsr-date{font-size:11px;color:var(--mgray);flex:0 0 auto;}
+.gsr-tab{font-size:10px;padding:2px 7px;border-radius:10px;font-weight:800;flex:0 0 auto;}
+.gsr-tab.d{background:#dbeafe;color:#1d4ed8;}
+.gsr-tab.r{background:#dcfce7;color:#15803d;}
+.gsr-tab.ps{background:#fef3c7;color:#92400e;}
+.gsr-tab.pr{background:#fee2e2;color:#991b1b;}
+
+/* ═══ DRILL-DOWN MODAL ═══ */
+.drill-bg{position:fixed;inset:0;background:rgba(15,22,66,.65);backdrop-filter:blur(6px);
+  z-index:600;display:flex;align-items:center;justify-content:center;}
+.drill-bg.hidden{display:none;}
+.drill-modal{background:#fff;border-radius:18px;padding:0;width:900px;max-width:97vw;
+  max-height:85vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.25);}
+.drill-header{padding:20px 24px 16px;border-bottom:2px solid var(--lgray);
+  display:flex;align-items:center;gap:12px;}
+.drill-header h2{font-size:16px;font-weight:800;color:var(--navy);flex:1;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.drill-body{overflow-y:auto;flex:1;padding:16px 24px 20px;}
+.drill-close{background:none;border:1px solid var(--lgray);border-radius:8px;
+  padding:6px 12px;cursor:pointer;font-size:13px;font-weight:700;color:var(--gray);}
+.drill-close:hover{border-color:var(--red);color:var(--red);}
+.drill-stats{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px;}
+.drill-stat{background:linear-gradient(135deg,#f8faff,#eef2ff);border:1px solid #e0e7ff;
+  border-radius:10px;padding:10px 16px;font-size:13px;}
+.drill-stat strong{display:block;font-size:22px;font-weight:900;color:var(--navy);}
+
+/* ═══ REFRESH INTERVAL SELECTOR ═══ */
+.ar-wrap{display:inline-flex;align-items:center;gap:6px;}
+.ar-sel{padding:6px 10px;border:1.5px solid rgba(255,255,255,.25);border-radius:8px;
+  background:rgba(255,255,255,.1);color:var(--ice);font-size:12px;font-weight:700;
+  cursor:pointer;outline:none;}
+.ar-sel:focus{border-color:var(--teal);}
+.ar-sel option{background:#1E2761;color:#fff;}
+
 </style>
 </head>
 <body>
@@ -275,8 +353,17 @@ tbody tr:last-child td{border-bottom:none;}
     <span id="liveWrap" style="display:none;align-items:center;gap:5px;font-size:11px;color:#6ee7b7;font-weight:700;">
       <span class="live-dot"></span>LIVE
     </span>
-    <button class="btn btn-teal" id="btnRefresh" onclick="loadFromGSheets()">🔄 Refresh Data</button>
-    <button class="btn btn-navy" id="btnAR" style="display:none" onclick="toggleAR()">⏸ Auto-Refresh</button>
+    <button class="btn btn-navy" onclick="openSettings()">⚙️ Settings</button><button class="btn btn-teal" id="btnRefresh" onclick="loadFromGSheets()">🔄 Refresh Data</button>
+    <div class="ar-wrap" id="arWrap" style="display:none">
+      <button class="btn btn-navy" id="btnAR" onclick="toggleAR()">▶ Auto-Refresh</button>
+      <select class="ar-sel" id="arInterval" onchange="changeARInterval(this.value)">
+        <option value="30000">30s</option>
+        <option value="60000">1 min</option>
+        <option value="300000" selected>5 min</option>
+        <option value="600000">10 min</option>
+        <option value="1800000">30 min</option>
+      </select>
+    </div>
     <button class="btn btn-amber" onclick="exportXLSX()">⬇ Excel</button>
     <button class="btn btn-red" onclick="window.print()">⬇ PDF</button>
     <div class="hdr-ts" id="hdrTs"></div>
@@ -297,7 +384,13 @@ tbody tr:last-child td{border-bottom:none;}
     <option value="11">November</option><option value="12">December</option>
   </select>
   <button class="btn-clear" onclick="clrGlobal()">✕ Clear</button>
-  <div class="gbar-info" id="gInfo">All Data</div>
+  <div class="gsearch-wrap" style="position:relative">
+      <span class="sico">🔍</span>
+      <input type="text" id="globalSearch" placeholder="Search all tabs…" oninput="onGlobalSearch(this.value)" autocomplete="off">
+      <button class="sclr" onclick="clearGlobalSearch()">✕</button>
+      <div class="gsearch-res" id="gsearchRes"></div>
+    </div>
+    <div class="gbar-info" id="gInfo">All Data</div>
   <div class="divider"></div>
   <span style="font-size:11px;color:var(--gray);">📋 Table: use <strong>From / To</strong> date inside each tab</span>
 </div>
@@ -325,6 +418,7 @@ tbody tr:last-child td{border-bottom:none;}
   <div class="kpi-toggle on" id="tog4" onclick="toggleKPI(4)">💳 CR Dispatched</div>
   <div class="kpi-toggle on" id="tog5" onclick="toggleKPI(5)">💳 CR Pending Return</div>
   <div class="kpi-toggle on" id="tog6" onclick="toggleKPI(6)">⚠️ CR Pending Support</div>
+  <div class="kpi-toggle on" id="tog7" onclick="toggleKPI(7)">🔧 Key Parts Pending Return</div>
 </div>
 
 <div class="kpi-grid" id="kpiGrid">
@@ -391,6 +485,14 @@ tbody tr:last-child td{border-bottom:none;}
     <canvas id="spark6" height="32" style="width:100%;margin-top:6px;display:block;"></canvas>
     <div class="kpi-insight" id="ins6"></div>
   </div>
+  <!-- KPI 7: Key Parts Pending Return (8 parts combined) -->
+  <div class="kpi n" id="kpi7"><div class="kpi-ico">🔧</div>
+    <div class="kpi-lbl">Key Parts — Pending Return</div>
+    <div class="kpi-num" id="k7">0</div>
+    <div class="kpi-sub">8 ລາຍການຫຼັກທີ່ລໍຖ້າສົ່ງຄືນ MIC</div>
+    <div class="kpi-foot"><span class="badge bn" id="k7s">— records</span></div>
+    <div class="kpi-insight" id="ins7"></div>
+  </div>
 </div>
 
 <!-- CHARTS -->
@@ -415,6 +517,12 @@ tbody tr:last-child td{border-bottom:none;}
     <div class="card-ttl">Top 8 — Most Pending Return</div>
     <div class="ch-wrap"><canvas id="cTopP"></canvas></div>
   </div>
+</div>
+
+<!-- KEY PARTS PENDING RETURN -->
+<div class="sec">🔧 Key Parts — Pending Return to MIC</div>
+<div id="keyPartsPanel" style="padding:0 16px 20px">
+  <div style="color:var(--gray);font-size:13px">Loading…</div>
 </div>
 
 <!-- DETAIL TABS -->
@@ -618,6 +726,7 @@ function applyGlobal() {
   }
   renderKPIs();
   renderCharts();
+  renderKeyParts();
   checkAlert();
   renderAll();
 }
@@ -676,7 +785,7 @@ function matchGlobal(dateStr) {
 // ═══════════════════════════════════════════════
 // KPI TOGGLE
 // ═══════════════════════════════════════════════
-const kpiVisible = {0:true,1:true,2:true,3:true,4:true,5:true,6:true};
+const kpiVisible = {0:true,1:true,2:true,3:true,4:true,5:true,6:true,7:true};
 
 function toggleSettings(){
   const el=document.getElementById('kpiSettings');
@@ -739,6 +848,27 @@ function renderKPIs() {
   // Animate
   anim('k0',td); anim('k1',tr); anim('k2',psCount); anim('k3',prQty);
   anim('k4',crDisp); anim('k5',crPendQty); anim('k6',crPendSup);
+
+  // KPI 7 — Key Parts Pending Return (8 parts combined)
+  let kp7Qty = 0, kp7Records = 0, kp7Urgent = 0;
+  if (DET) {
+    const prSrc = (GY||GM) ? DET.pending_return.filter(r=>matchGlobal(r.date)) : DET.pending_return;
+    KEY_PARTS.forEach(kp => {
+      const rows = prSrc.filter(r=>(r.part_name||'').toUpperCase().includes(kp.toUpperCase()));
+      const q = rows.reduce((s,r)=>s+r.qty,0);
+      kp7Qty += q;
+      kp7Records += rows.length;
+      if (q >= 20) kp7Urgent++;  // Urgent threshold
+    });
+  }
+  anim('k7', kp7Qty);
+  document.getElementById('k7s').textContent = kp7Records + ' records · ' + kp7Urgent + ' urgent';
+  setIns('ins7',[
+    kp7Urgent > 0
+      ? `<span class="ins ins-warn">⚠ ${kp7Urgent} part type${kp7Urgent>1?'s':''} urgent</span>`
+      : `<span class="ins ins-up">✓ Normal</span>`,
+    kp7Records > 0 ? `<span class="ins ins-info">${KEY_PARTS.length} parts tracked</span>` : ''
+  ]);
 
   // Subtitles
   document.getElementById('k0s').textContent=months+(months===1?' month':' months');
@@ -1021,6 +1151,110 @@ function noRows(msg){
 }
 
 // ═══════════════════════════════════════════════
+// KEY PARTS — PENDING RETURN TO MIC
+// ═══════════════════════════════════════════════
+const KEY_PARTS = [
+  'CARD READER U-IMCRW',
+  'PC POCONO MAINBOARD',
+  'S1 DISPENSER CONTROL BOARD',
+  'HDD SATA',
+  'S2 SNT TLA ASSY',
+  'S2 DISPENSER CONTROL BOARD',
+  'S2 F/A CARRIAGE ASSY',
+  'S2 PICK MODULE ASSEMBLY'
+];
+
+function renderKeyParts() {
+  const panel = document.getElementById('keyPartsPanel');
+  if (!panel) return;
+  if (!DET) {
+    panel.innerHTML = '<div style="color:var(--gray);font-size:13px;padding:8px 0">Upload an Excel file to see key parts data.</div>';
+    return;
+  }
+
+  const src = (GY||GM) ? DET.pending_return.filter(r=>matchGlobal(r.date)) : DET.pending_return;
+
+  const today = new Date(); today.setHours(0,0,0,0);
+  const maxQty = Math.max(1, ...KEY_PARTS.map(k2 =>
+    src.filter(r=>(r.part_name||'').toUpperCase().includes(k2.toUpperCase())).reduce((s,r)=>s+r.qty,0)
+  ));
+
+  const rows = KEY_PARTS.map((kp, idx) => {
+    const matched = src.filter(r => (r.part_name||'').toUpperCase().includes(kp.toUpperCase()));
+    const qty    = matched.reduce((s,r)=>s+r.qty, 0);
+    const items  = matched.length;
+    const stores = [...new Set(matched.map(r=>r.store).filter(Boolean))].slice(0,3).join(', ') || '—';
+
+    // Dates
+    const dates = matched.map(r=>parseAnyDate(r.date)).filter(Boolean);
+    const oldestDate  = dates.length ? new Date(Math.min(...dates)) : null;
+    const latestDate  = dates.length ? new Date(Math.max(...dates)) : null;
+    const maxDays = oldestDate ? Math.floor((today - oldestDate)/(1000*60*60*24)) : null;
+
+    const dayCol  = maxDays !== null ? (maxDays > 60 ? '#DC2626' : maxDays > 30 ? '#F59E0B' : '#1E2761') : '#94A3B8';
+    const daysStr = maxDays !== null ? `<span style="font-weight:800;color:${dayCol}">${maxDays}</span> ມື້` : '—';
+    const latestStr = latestDate ? latestDate.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}) : '—';
+
+    const urgColor = qty >= 20 ? '#DC2626' : qty >= 15 ? '#F59E0B' : qty > 0 ? '#1E2761' : '#94A3B8';
+    const urgBg    = qty >= 20 ? '#FEF2F2' : qty >= 15 ? '#FFFBEB' : qty > 0 ? '#EFF6FF' : '#F8FAFC';
+    const urgBadge = qty >= 20 ? '🔴 Urgent' : qty >= 15 ? '🟡 High' : qty > 0 ? '🔵 Normal' : '✅ Clear';
+    const barW     = qty > 0 ? Math.max(4, Math.round(qty / maxQty * 100)) : 0;
+
+    return `<tr style="border-bottom:1px solid #F1F5F9">
+      <td style="padding:10px 12px;font-size:13px;font-weight:700;color:#94A3B8;text-align:center;width:36px">${idx+1}</td>
+      <td style="padding:10px 12px;font-size:13px;font-weight:600;color:#1E2761">${kp}</td>
+      <td style="padding:10px 12px;text-align:center">
+        <span style="background:${urgBg};color:${urgColor};font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;white-space:nowrap">${urgBadge}</span>
+      </td>
+      <td style="padding:10px 12px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="flex:1;background:#E2E8F0;border-radius:99px;height:8px;min-width:60px">
+            <div style="width:${barW}%;height:100%;background:${urgColor};border-radius:99px;transition:width .4s"></div>
+          </div>
+          <span style="font-size:14px;font-weight:900;color:${urgColor};min-width:32px;text-align:right">${qty.toLocaleString()}</span>
+        </div>
+      </td>
+      <td style="padding:10px 12px;font-size:12px;color:#64748B;text-align:center">${items}</td>
+      <td style="padding:10px 12px;font-size:12px;color:#64748B">${stores}</td>
+      <td style="padding:10px 12px;font-size:12px;color:#64748B;white-space:nowrap">${oldestDate ? oldestDate.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}) : '—'}</td>
+      <td style="padding:10px 12px;font-size:12px;text-align:center">${daysStr}</td>
+      <td style="padding:10px 12px;font-size:12px;color:#64748B;white-space:nowrap">${latestStr}</td>
+    </tr>`;
+  });
+
+  const total = KEY_PARTS.reduce((s, kp) => {
+    return s + src.filter(r=>(r.part_name||'').toUpperCase().includes(kp.toUpperCase())).reduce((a,r)=>a+r.qty,0);
+  }, 0);
+
+  panel.innerHTML = `
+  <div style="background:#fff;border-radius:14px;box-shadow:0 2px 10px rgba(0,0,0,.08);overflow:hidden">
+    <table style="width:100%;border-collapse:collapse">
+      <thead>
+        <tr style="background:#F8FAFC;border-bottom:2px solid #E2E8F0">
+          <th style="padding:10px 12px;font-size:11px;font-weight:800;color:#94A3B8;text-align:center">#</th>
+          <th style="padding:10px 12px;font-size:11px;font-weight:800;color:#94A3B8;text-align:left">ຊື່ລາຍການ (Part Name)</th>
+          <th style="padding:10px 12px;font-size:11px;font-weight:800;color:#94A3B8;text-align:center">ສະຖານະ</th>
+          <th style="padding:10px 12px;font-size:11px;font-weight:800;color:#94A3B8;text-align:left">ຈຳນວນ Units</th>
+          <th style="padding:10px 12px;font-size:11px;font-weight:800;color:#94A3B8;text-align:center">Records</th>
+          <th style="padding:10px 12px;font-size:11px;font-weight:800;color:#94A3B8;text-align:left">Store</th>
+          <th style="padding:10px 12px;font-size:11px;font-weight:800;color:#94A3B8;text-align:left">ຄ້າງຕັ້ງແຕ່</th>
+          <th style="padding:10px 12px;font-size:11px;font-weight:800;color:#94A3B8;text-align:center">ມື້ທີ່ຄ້າງ</th>
+          <th style="padding:10px 12px;font-size:11px;font-weight:800;color:#94A3B8;text-align:left">ວັນທີຄ້າງລ້າສຸດ</th>
+        </tr>
+      </thead>
+      <tbody>${rows.join('')}</tbody>
+      <tfoot>
+        <tr style="background:#F8FAFC;border-top:2px solid #E2E8F0">
+          <td colspan="3" style="padding:10px 12px;font-size:12px;font-weight:800;color:#1E2761;text-align:right">ລວມທັງໝົດ</td>
+          <td style="padding:10px 12px;font-size:15px;font-weight:900;color:#1E2761">${total.toLocaleString()} units</td>
+          <td colspan="5"></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════
 // RENDER TABLES
 // ═══════════════════════════════════════════════
 function renderAll(){render_d();render_r();render_ps();render_pr();}
@@ -1207,7 +1441,7 @@ function parseFromArrays(ws2,ws4,ws3,ws5){
   });
   document.getElementById('gY').value='';document.getElementById('gM').value='';
   GY='';GM='';Object.keys(pg).forEach(k=>pg[k]=0);
-  populateGlobalYears();renderKPIs();renderCharts();checkAlert();renderAll();updateTs();
+  populateGlobalYears();renderKPIs();renderCharts();renderKeyParts();checkAlert();renderAll();updateTs();
   toast(`✅ Live: ${dr.length.toLocaleString()} dispatched · ${rr.length.toLocaleString()} returned · ${pr.length.toLocaleString()} pending`);
 }
 
@@ -1291,6 +1525,7 @@ function procBuf(buf){
     populateGlobalYears();
     renderKPIs();
     renderCharts();
+    renderKeyParts();
     checkAlert();
     renderAll();
     updateTs();
@@ -1564,6 +1799,308 @@ function toast(msg){
   t.textContent=msg; document.body.appendChild(t);
   setTimeout(()=>{t.style.opacity='0';t.style.transform='translateY(8px)';setTimeout(()=>t.remove(),500);},3000);
 }
+
+// ══════════════════════════════════════════════════════════
+// v2: SETTINGS (localStorage-based APPS_SCRIPT_URL)
+// ══════════════════════════════════════════════════════════
+let DYNAMIC_URL = localStorage.getItem('bcel_apps_url') || APPS_SCRIPT_URL;
+let AR_INTERVAL = parseInt(localStorage.getItem('bcel_ar_interval') || '300000');
+
+function openSettings(){
+  document.getElementById('sUrlInput').value = DYNAMIC_URL;
+  const iSel = document.getElementById('sIntervalSel');
+  if(iSel) iSel.value = String(AR_INTERVAL);
+  const aISel = document.getElementById('arInterval');
+  if(aISel) aISel.value = String(AR_INTERVAL);
+  document.getElementById('sStatus').style.display='none';
+  document.getElementById('settingsBg').classList.remove('hidden');
+}
+function closeSettings(){
+  document.getElementById('settingsBg').classList.add('hidden');
+}
+function saveSettings(){
+  const url = document.getElementById('sUrlInput').value.trim();
+  const interval = parseInt(document.getElementById('sIntervalSel').value);
+  if(url){ DYNAMIC_URL=url; localStorage.setItem('bcel_apps_url',url); }
+  AR_INTERVAL = interval; localStorage.setItem('bcel_ar_interval',String(interval));
+  // Sync interval selector in header
+  const aISel = document.getElementById('arInterval');
+  if(aISel) aISel.value = String(interval);
+  // Restart AR if running
+  if(arTimer){ clearInterval(arTimer); arTimer=null; if(interval>0) startAR(); }
+  const s=document.getElementById('sStatus');
+  s.style.display='block'; s.textContent='✅ Saved! Click Refresh Data to reload.';
+  setTimeout(()=>closeSettings(),1500);
+}
+
+// ══════════════════════════════════════════════════════════
+// v2: OVERRIDE loadFromGSheets to use DYNAMIC_URL + fix btnAR
+// ══════════════════════════════════════════════════════════
+async function loadFromGSheets(){
+  const url = DYNAMIC_URL;
+  if(!url || url === 'YOUR_APPS_SCRIPT_URL_HERE'){
+    toast('⚠️ Please set Apps Script URL in ⚙️ Settings first');
+    openSettings(); return;
+  }
+  const btn=document.getElementById('btnRefresh');
+  if(btn){btn.textContent='⏳ Loading...';btn.disabled=true;}
+  try{
+    const res=await fetch(url);
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    const json=await res.json();
+    if(json.error)throw new Error(json.error);
+    parseFromArrays(
+      json['Support Part Request to BCEL']||[],
+      json['BCEL Return part failed to MIC']||[],
+      json['MIC Pending to support BCEL']||[],
+      json['BCEL part pending Return to MIC']||[]
+    );
+    // ✅ FIX: show auto-refresh controls
+    document.getElementById('liveWrap').style.display='inline-flex';
+    document.getElementById('arWrap').style.display='inline-flex';
+    if(!arTimer && AR_INTERVAL>0) startAR();
+  }catch(e){
+    console.error(e);
+    toast('⚠️ Google Sheets load failed: '+e.message);
+  }finally{
+    if(btn){btn.textContent='🔄 Refresh Data';btn.disabled=false;}
+  }
+}
+
+// ══════════════════════════════════════════════════════════
+// v2: CONFIGURABLE AUTO-REFRESH INTERVAL
+// ══════════════════════════════════════════════════════════
+function startAR(){
+  if(arTimer)clearInterval(arTimer);
+  const interval = AR_INTERVAL > 0 ? AR_INTERVAL : 300000;
+  // For file-based refresh use refreshHandle, for GSheets use loadFromGSheets
+  const fn = fsaHandle ? refreshHandle : loadFromGSheetsQuiet;
+  arTimer=setInterval(fn, interval);
+  const btn=document.getElementById('btnAR');
+  if(btn) btn.textContent='⏸ Auto-Refresh';
+}
+function changeARInterval(val){
+  AR_INTERVAL = parseInt(val);
+  localStorage.setItem('bcel_ar_interval',val);
+  if(arTimer){ clearInterval(arTimer); arTimer=null; startAR(); }
+  const ms=parseInt(val);
+  const lbl=ms>=3600000?'1h':ms>=1800000?'30m':ms>=600000?'10m':ms>=300000?'5m':ms>=60000?'1m':'30s';
+  toast('⏱ Auto-refresh: every '+lbl);
+}
+async function loadFromGSheetsQuiet(){
+  const url=DYNAMIC_URL; if(!url)return;
+  try{
+    const res=await fetch(url);
+    if(!res.ok)return;
+    const json=await res.json();
+    if(json.error)return;
+    parseFromArrays(
+      json['Support Part Request to BCEL']||[],
+      json['BCEL Return part failed to MIC']||[],
+      json['MIC Pending to support BCEL']||[],
+      json['BCEL part pending Return to MIC']||[]
+    );
+    toast('✅ Auto-refreshed');
+  }catch(e){ /* silent fail */ }
+}
+function toggleAR(){
+  const btn=document.getElementById('btnAR');
+  if(arTimer){
+    clearInterval(arTimer);arTimer=null;
+    if(btn)btn.textContent='▶ Auto-Refresh';
+    toast('⏸ Auto-refresh paused.');
+  }else{
+    startAR();
+    toast('▶ Auto-refresh running.');
+  }
+}
+
+// ══════════════════════════════════════════════════════════
+// v2: GLOBAL SEARCH across all tabs
+// ══════════════════════════════════════════════════════════
+let gsTimer=null;
+function onGlobalSearch(val){
+  clearTimeout(gsTimer);
+  gsTimer=setTimeout(()=>doGlobalSearch(val.trim()),200);
+}
+function clearGlobalSearch(){
+  document.getElementById('globalSearch').value='';
+  document.getElementById('gsearchRes').classList.remove('show');
+}
+function doGlobalSearch(q){
+  const box=document.getElementById('gsearchRes');
+  if(!q||q.length<2||!DET){box.classList.remove('show');return;}
+  const ql=q.toLowerCase();
+  const hit=(r)=>JSON.stringify(Object.values(r)).toLowerCase().includes(ql);
+  const dRows=DET.dispatch_rows.filter(hit).slice(0,5);
+  const rRows=DET.return_rows.filter(hit).slice(0,5);
+  const psRows=DET.pending_support.filter(r=>JSON.stringify(r).toLowerCase().includes(ql)).slice(0,5);
+  const prRows=DET.pending_return.filter(hit).slice(0,5);
+  const total=dRows.length+rRows.length+psRows.length+prRows.length;
+  if(total===0){
+    box.innerHTML='<div style="padding:14px 16px;font-size:13px;color:var(--gray)">No results found</div>';
+    box.classList.add('show'); return;
+  }
+  const fmtD2=s=>{if(!s)return'';try{return new Date(s).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'2-digit'});}catch{return s;}};
+  const mkRows=(arr,cls,label,keyFn)=>arr.length?
+    `<div class="gsr-group">${label}</div>`+
+    arr.map(r=>`<div class="gsr-row" onclick="gotoTab('${cls}',${JSON.stringify(keyFn(r))})">
+      <span class="gsr-ticket">${esc(keyFn(r))}</span>
+      <span class="gsr-part">${esc(r.part_name||r.part||'')}</span>
+      <span class="gsr-date">${fmtD2(r.date)}</span>
+      <span class="gsr-tab ${cls}">${label}</span>
+    </div>`).join('') : '';
+  box.innerHTML =
+    mkRows(dRows,'d','📤 Dispatched',r=>r.ticket)+
+    mkRows(rRows,'r','📥 Returned',r=>r.ticket)+
+    mkRows(psRows,'ps','⏳ Pending Support',r=>r.ref||r.no)+
+    mkRows(prRows,'pr','🔄 Pending Return',r=>r.part_code||r.part_name);
+  box.classList.add('show');
+}
+function gotoTab(tab,q){
+  document.getElementById('gsearchRes').classList.remove('show');
+  document.getElementById('globalSearch').value='';
+  const tabMap={d:'t-d',r:'t-r',ps:'t-ps',pr:'t-pr'};
+  const tabEl=document.querySelector(`.tab[onclick*="${tabMap[tab]}"]`);
+  if(tabEl){tabEl.click();}
+  // Apply search to that tab
+  const qIds={d:'d_Q',r:'r_Q',ps:'ps_Q',pr:'pr_Q'};
+  const qEl=document.getElementById(qIds[tab]);
+  if(qEl){qEl.value=q;renderAll();}
+}
+// Close search on outside click
+document.addEventListener('click',e=>{
+  const wrap=document.querySelector('.gsearch-wrap');
+  if(wrap&&!wrap.contains(e.target))document.getElementById('gsearchRes').classList.remove('show');
+});
+
+// ══════════════════════════════════════════════════════════
+// v2: DRILL-DOWN MODAL
+// ══════════════════════════════════════════════════════════
+function openDrill(partName, source){
+  if(!DET)return;
+  const title=document.getElementById('drillTitle');
+  const body=document.getElementById('drillBody');
+  title.textContent='🔍 '+partName;
+  const sh=s=>s&&s.length>30?s.slice(0,28)+'…':s||'—';
+  let rows=[], cols=[], label='';
+  if(source==='dispatch'||source==='d'){
+    rows=DET.dispatch_rows.filter(r=>r.part_name===partName);
+    cols=['Ticket','Date','Serial','Store','Qty','Purpose','Receiver'];
+    label='📤 Dispatched';
+  } else if(source==='return'||source==='r'){
+    rows=DET.return_rows.filter(r=>r.part_name===partName);
+    cols=['Ticket','Date','From','Store','Qty','Purpose'];
+    label='📥 Returned';
+  } else if(source==='pending_return'||source==='pr'){
+    rows=DET.pending_return.filter(r=>r.part_name===partName);
+    cols=['Sender','Date','Qty','Serial','Address','Store','Group'];
+    label='🔄 Pending Return';
+  }
+  const totalQty=rows.reduce((s,r)=>s+(r.qty||0),0);
+  body.innerHTML=`
+    <div class="drill-stats">
+      <div class="drill-stat"><strong>${rows.length.toLocaleString()}</strong>Records</div>
+      <div class="drill-stat"><strong>${totalQty.toLocaleString()}</strong>Total Qty</div>
+      <div class="drill-stat" style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-color:#bbf7d0">
+        <strong style="color:var(--teal)">${label}</strong>Source</div>
+    </div>
+    <div class="tbl-wrap">
+    <table><thead><tr>${cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead>
+    <tbody>${rows.length?rows.map(r=>{
+      if(source==='dispatch'||source==='d')
+        return `<tr><td>${esc(r.ticket)}</td><td>${fmtD(r.date)}</td><td>${esc(r.serial)||'—'}</td>
+          <td>${esc(r.store)||'—'}</td><td class="num">${r.qty}</td>
+          <td>${esc(r.purpose)||'—'}</td><td>${esc(r.receiver)||'—'}</td></tr>`;
+      if(source==='return'||source==='r')
+        return `<tr><td>${esc(r.ticket)}</td><td>${fmtD(r.date)}</td><td>${esc(r.from)||'—'}</td>
+          <td>${esc(r.store)||'—'}</td><td class="num">${r.qty}</td><td>${esc(r.purpose)||'—'}</td></tr>`;
+      return `<tr><td>${esc(r.sender)||'—'}</td><td>${fmtD(r.date)}</td>
+        <td class="num">${r.qty}</td><td>${esc(r.serial)||'—'}</td>
+        <td>${esc(r.address)||'—'}</td><td>${esc(r.store)||'—'}</td>
+        <td><span class="pill p-a">${esc(r.part_group)||'—'}</span></td></tr>`;
+    }).join(''):'<tr><td colspan="9"><div class="no-data"><div class="ico">📭</div><h3>No records</h3></div></td></tr>'}
+    </tbody></table></div>`;
+  document.getElementById('drillBg').classList.remove('hidden');
+}
+function closeDrill(){document.getElementById('drillBg').classList.add('hidden');}
+
+// ══════════════════════════════════════════════════════════
+// v2: PATCH renderAnalysis to add clickable parts
+// ══════════════════════════════════════════════════════════
+const _origRenderAnalysis = renderAnalysis;
+renderAnalysis = function(td,tr,net,psCount,prQty,prItems,crDisp,crRet,crPendQty,crPendItems,crPendSup,crOverdue){
+  _origRenderAnalysis.apply(this,arguments);
+  // After render, make part bars clickable
+  setTimeout(()=>{
+    const grid=document.getElementById('analysisGrid'); if(!grid)return;
+    // Patch the barRow labels in card 2 (pending return) and card 4 (top dispatch)
+    grid.querySelectorAll('.a-bar-row .a-bar-lbl').forEach(el=>{
+      const name=el.textContent;
+      if(!name||name.length<2)return;
+      // Determine source: if in card with teal title = dispatch, red = pending return
+      const card=el.closest('.a-card');
+      if(!card)return;
+      const isRed=card.classList.contains('red');
+      const src=isRed?'pr':'d';
+      el.style.cursor='pointer';
+      el.style.color='var(--navy)';
+      el.style.textDecoration='underline dotted';
+      el.title='Click to see all records';
+      el.onclick=()=>openDrill(name, src);
+    });
+  },50);
+};
+
+// Init: load saved URL
+(function(){
+  const saved=localStorage.getItem('bcel_apps_url');
+  if(saved) DYNAMIC_URL=saved;
+  const savedI=localStorage.getItem('bcel_ar_interval');
+  if(savedI){ AR_INTERVAL=parseInt(savedI);
+    const s=document.getElementById('arInterval');if(s)s.value=savedI;
+    const s2=document.getElementById('sIntervalSel');if(s2)s2.value=savedI;
+  }
+})();
+
 </script>
+
+<!-- ═══ SETTINGS MODAL ═══ -->
+<div class="smodal-bg hidden" id="settingsBg" onclick="if(event.target===this)closeSettings()">
+<div class="smodal">
+  <h2>⚙️ Dashboard Settings</h2>
+  <p>ຕັ້ງຄ່າ Google Sheets URL ແລະ Auto-Refresh interval</p>
+  <label>🔗 Google Apps Script URL</label>
+  <input type="text" id="sUrlInput" placeholder="https://script.google.com/macros/s/..." style="font-family:monospace;font-size:12px">
+  <div class="smodal-row">
+    <label>⏱ Auto-Refresh</label>
+    <select id="sIntervalSel">
+      <option value="30000">Every 30 seconds</option>
+      <option value="60000">Every 1 minute</option>
+      <option value="300000" selected>Every 5 minutes</option>
+      <option value="600000">Every 10 minutes</option>
+      <option value="1800000">Every 30 minutes</option>
+      <option value="0">Off (manual only)</option>
+    </select>
+  </div>
+  <div class="s-status" id="sStatus">✅ Settings saved to browser</div>
+  <div class="smodal-footer">
+    <button class="btn" style="background:#f1f5f9;color:var(--navy)" onclick="closeSettings()">Cancel</button>
+    <button class="btn btn-teal" onclick="saveSettings()">💾 Save & Apply</button>
+  </div>
+</div>
+</div>
+
+<!-- ═══ DRILL-DOWN MODAL ═══ -->
+<div class="drill-bg hidden" id="drillBg" onclick="if(event.target===this)closeDrill()">
+<div class="drill-modal">
+  <div class="drill-header">
+    <h2 id="drillTitle">Part Details</h2>
+    <button class="drill-close" onclick="closeDrill()">✕ Close</button>
+  </div>
+  <div class="drill-body" id="drillBody"></div>
+</div>
+</div>
+
 </body>
 </html
