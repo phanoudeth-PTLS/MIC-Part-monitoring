@@ -1196,7 +1196,7 @@ function renderKeyParts() {
     const dates = matched.map(r=>parseAnyDate(r.date)).filter(Boolean);
     const oldestDate  = dates.length ? new Date(Math.min(...dates)) : null;
     const latestDate  = dates.length ? new Date(Math.max(...dates)) : null;
-    const maxDays = oldestDate ? Math.floor((today - oldestDate)/(1000*60*60*24)) : null;
+    const maxDays = oldestDate ? Math.max(0, Math.floor((today - oldestDate)/(1000*60*60*24))) : null;
 
     const dayCol  = maxDays !== null ? (maxDays > 60 ? '#DC2626' : maxDays > 30 ? '#F59E0B' : '#1E2761') : '#94A3B8';
     const daysStr = maxDays !== null ? `<span style="font-weight:800;color:${dayCol}">${maxDays}</span> ມື້` : '—';
@@ -1308,7 +1308,7 @@ function render_r(){
 function daysWaiting(dateStr) {
   const d = parseAnyDate(dateStr);
   if (!d) return null;
-  return Math.floor((new Date() - d) / (1000*60*60*24));
+  return Math.max(0, Math.floor((new Date() - d) / (1000*60*60*24)));
 }
 
 function daysCell(days) {
