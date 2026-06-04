@@ -25,6 +25,30 @@
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:var(--offwh);color:#1e293b;font-size:15px;line-height:1.5;}
 
+/* ═══ LOGIN SCREEN ═══ */
+#loginScreen{position:fixed;inset:0;z-index:9999;
+  background:linear-gradient(135deg,var(--navy3) 0%,var(--navy2) 60%,#1a237e 100%);
+  display:flex;align-items:center;justify-content:center;}
+#loginScreen.hidden{display:none;}
+.login-box{background:#fff;border-radius:20px;padding:44px 40px;width:100%;max-width:400px;
+  box-shadow:0 24px 64px rgba(0,0,0,.45);text-align:center;}
+.login-logo{margin-bottom:20px;}
+.login-logo img{height:36px;width:auto;}
+.login-box h2{font-size:18px;font-weight:800;color:var(--navy);margin-bottom:4px;}
+.login-box p{font-size:12px;color:var(--gray);margin-bottom:28px;}
+.login-field{text-align:left;margin-bottom:16px;}
+.login-field label{display:block;font-size:12px;font-weight:700;color:var(--navy);margin-bottom:6px;letter-spacing:.5px;}
+.login-field input{width:100%;padding:11px 14px;border:1.5px solid var(--lgray);border-radius:10px;
+  font-size:14px;font-family:inherit;color:var(--navy);outline:none;transition:border-color .2s;}
+.login-field input:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(13,148,136,.12);}
+.login-btn{width:100%;padding:12px;border:none;border-radius:10px;margin-top:8px;
+  background:linear-gradient(135deg,var(--teal),var(--teal2));color:#fff;
+  font-size:15px;font-weight:800;cursor:pointer;transition:opacity .2s;letter-spacing:.3px;}
+.login-btn:hover{opacity:.88;}
+.login-err{color:var(--red);font-size:12.5px;font-weight:600;margin-top:12px;min-height:18px;}
+#mainApp{display:none;}
+#mainApp.visible{display:block;}
+
 /* ═══ HEADER ═══ */
 .hdr{position:sticky;top:0;z-index:100;background:linear-gradient(135deg,var(--navy3) 0%,var(--navy2) 50%,#1a237e 100%);
   padding:0 16px;height:56px;display:flex;align-items:center;gap:10px;
@@ -343,6 +367,33 @@ tbody tr:last-child td{border-bottom:none;}
 </style>
 </head>
 <body>
+
+<!-- LOGIN SCREEN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">
+      <img src="https://microtecweb.com/Content/themes/default/images/microtec_logo.png"
+           onerror="this.onerror=null;this.src='https://microtecweb.com/Content/themes/default/images/logo_large.gif';"
+           alt="Microtec">
+    </div>
+    <h2>BCEL ATM Parts Monitor</h2>
+    <p>ກະລຸນາ Login ກ່ອນເຂົ້າໃຊ້ງານ</p>
+    <div class="login-field">
+      <label>USERNAME</label>
+      <input type="text" id="loginUser" placeholder="Username" autocomplete="username">
+    </div>
+    <div class="login-field">
+      <label>PASSWORD</label>
+      <input type="password" id="loginPass" placeholder="Password" autocomplete="current-password"
+             onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <button class="login-btn" onclick="doLogin()">🔐 ເຂົ້າລະບົບ</button>
+    <div class="login-err" id="loginErr"></div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="mainApp">
 
 <!-- HEADER -->
 <canvas id="hdrCanvas" style="position:absolute;top:0;left:0;width:100%;height:56px;pointer-events:none;z-index:0;"></canvas>
@@ -2109,5 +2160,40 @@ renderAnalysis = function(td,tr,net,psCount,prQty,prItems,crDisp,crRet,crPendQty
 </div>
 </div>
 
+</div><!-- /mainApp -->
+
+<script>
+// ── LOGIN AUTH ────────────────────────────────────────────
+const UN_HASH = '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918';
+const PW_HASH = 'c8f2d1ce17508fe948637bd352d379881d3735877f9844f103a2b53ff6e9a736';
+
+async function sha256(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+async function doLogin() {
+  const u = document.getElementById('loginUser').value.trim();
+  const p = document.getElementById('loginPass').value;
+  const err = document.getElementById('loginErr');
+  if (!u || !p) { err.textContent = 'ກະລຸນາໃສ່ Username ແລ້ວ Password'; return; }
+  const [uh, ph] = await Promise.all([sha256(u), sha256(p)]);
+  if (uh === UN_HASH && ph === PW_HASH) {
+    sessionStorage.setItem('mic_auth','1');
+    document.getElementById('loginScreen').classList.add('hidden');
+    document.getElementById('mainApp').classList.add('visible');
+  } else {
+    err.textContent = '❌ Username ຫຼື Password ບໍ່ຖືກຕ້ອງ';
+    document.getElementById('loginPass').value = '';
+  }
+}
+
+// Auto-unlock if already logged in this session
+if (sessionStorage.getItem('mic_auth') === '1') {
+  document.getElementById('loginScreen').classList.add('hidden');
+  document.getElementById('mainApp').classList.add('visible');
+}
+</script>
+
 </body>
-</html
+</html>
