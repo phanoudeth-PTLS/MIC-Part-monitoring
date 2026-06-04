@@ -789,12 +789,34 @@ const FSA = 'showOpenFilePicker' in window;
 // วาง URL ของ Apps Script Web App ด้านล่างนี้
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyZ5k2eIjpHiK9Dx-tK-ZWMww3tJwVHIInjM4cTy-gZ-RmuYp2RNifA0yH8cmuSWU50/exec';
 
+// ═══ REMARKS SHARED STORAGE (Google Apps Script) ═══
+// ວາງ URL ຂອງ Remarks Apps Script Web App ຂ້າງລຸ່ມນີ້
+// (ເບິ່ງໄຟລ໌ Remarks_GoogleAppsScript.js ສໍາລັບຄູ່ມືຕິດຕັ້ງ)
+const REMARKS_API_URL = 'PASTE_YOUR_REMARKS_API_URL_HERE';
+let _kpi8Remarks = {};
+
+async function loadRemarks() {
+  if (!REMARKS_API_URL || REMARKS_API_URL === 'https://script.google.com/macros/s/AKfycby8dkgM8HbRsyAgKrplggzzaWNtezUBdxin6cEmpnwX-r0vbjf3_rPZvpAV35DDquLL/exec') {
+    // fallback: load from localStorage
+    _kpi8Remarks = JSON.parse(localStorage.getItem('kpi8_remarks') || '{}');
+    return;
+  }
+  try {
+    const res = await fetch(REMARKS_API_URL + '?nocache=' + Date.now());
+    const json = await res.json();
+    if (json.ok) _kpi8Remarks = json.data || {};
+    else _kpi8Remarks = JSON.parse(localStorage.getItem('kpi8_remarks') || '{}');
+  } catch(e) {
+    _kpi8Remarks = JSON.parse(localStorage.getItem('kpi8_remarks') || '{}');
+  }
+}
 
 // ═══════════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', () => {
   updateTs();
+  loadRemarks(); // Load shared remarks from Google Sheets (or localStorage fallback)
   if(APPS_SCRIPT_URL && APPS_SCRIPT_URL !== 'YOUR_APPS_SCRIPT_URL_HERE'){
     loadFromGSheets();
   } else {
@@ -1056,7 +1078,7 @@ function renderKPI8() {
   if (el8o) el8o.textContent = overallOldest !== null ? '🔴 Oldest: ' + overallOldest + ' days' : '';
   if (el8l) el8l.textContent = overallLatest !== null ? '🟢 Latest: ' + overallLatest + ' days' : '';
 
-  const saved = JSON.parse(localStorage.getItem('kpi8_remarks') || '{}');
+  const saved = _kpi8Remarks;
   const tbody = document.getElementById('kpi8body');
   if (!rows.length) {
     tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--gray);padding:20px">No Parts Pending to Support</td></tr>';
@@ -1082,13 +1104,32 @@ function renderKPI8() {
   }).join('');
 }
 
-function saveRemark(safeKey, partName) {
+async function saveRemark(safeKey, partName) {
   const input = document.getElementById('rmk_' + safeKey);
   if (!input) return;
-  const saved = JSON.parse(localStorage.getItem('kpi8_remarks') || '{}');
-  saved[partName] = input.value;
-  localStorage.setItem('kpi8_remarks', JSON.stringify(saved));
+  const btn = input.closest('tr')?.querySelector('.kpi8-save');
   const sv = document.getElementById('sv_' + safeKey);
+  if (btn) { btn.disabled = true; btn.textContent = '⏳'; }
+
+  // Always update local cache
+  _kpi8Remarks[partName] = input.value;
+
+  if (REMARKS_API_URL && REMARKS_API_URL !== 'PASTE_YOUR_REMARKS_API_URL_HERE') {
+    try {
+      await fetch(REMARKS_API_URL, {
+        method: 'POST',
+        body: JSON.stringify({ part: partName, remark: input.value, updatedBy: 'Dashboard' })
+      });
+    } catch(e) {
+      // fallback to localStorage if API fails
+      localStorage.setItem('kpi8_remarks', JSON.stringify(_kpi8Remarks));
+    }
+  } else {
+    // No API configured — save to localStorage only
+    localStorage.setItem('kpi8_remarks', JSON.stringify(_kpi8Remarks));
+  }
+
+  if (btn) { btn.disabled = false; btn.textContent = '💾 Save'; }
   if (sv) { sv.style.display='inline'; setTimeout(()=>sv.style.display='none', 2000); }
 }
 
