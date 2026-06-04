@@ -114,6 +114,29 @@ select.fsel:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgb
 /* ═══ KPI CARDS ═══ */
 .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:6px;}
 @media(max-width:1200px){.kpi-grid{grid-template-columns:repeat(2,1fr);}}
+/* KPI 8 — Parts Pending to Support */
+.kpi8-wrap{background:var(--card);border-radius:var(--radius);padding:20px 22px;
+  box-shadow:var(--shadow-sm);border:1px solid rgba(255,255,255,.8);}
+.kpi8-wrap.hidden{display:none;}
+.kpi8-head{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.kpi8-ico{font-size:26px;}
+.kpi8-title{font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--gray);}
+.kpi8-count{font-size:32px;font-weight:900;background:linear-gradient(135deg,var(--amber),var(--amber2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;margin-top:2px;}
+.kpi8-tbl{width:100%;border-collapse:collapse;font-size:13px;}
+.kpi8-tbl th{font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;
+  color:var(--gray);padding:6px 10px;border-bottom:2px solid var(--lgray);text-align:left;}
+.kpi8-tbl td{padding:7px 10px;border-bottom:1px solid var(--lgray);vertical-align:middle;}
+.kpi8-tbl tr:last-child td{border-bottom:none;}
+.kpi8-tbl tr:hover td{background:#f8fafc;}
+.kpi8-remark{width:100%;border:1.5px solid var(--lgray);border-radius:6px;padding:5px 8px;
+  font-size:12px;font-family:inherit;color:var(--navy);outline:none;transition:border-color .2s;
+  background:#fff;}
+.kpi8-remark:focus{border-color:var(--amber);box-shadow:0 0 0 3px rgba(245,158,11,.12);}
+.kpi8-save{padding:4px 10px;border:none;border-radius:6px;background:var(--amber);color:#fff;
+  font-size:11px;font-weight:700;cursor:pointer;margin-left:6px;white-space:nowrap;}
+.kpi8-save:hover{background:var(--amber2);}
+.kpi8-saved{color:var(--green);font-size:11px;font-weight:700;margin-left:6px;}
 .kpi{background:var(--card);border-radius:var(--radius);padding:22px;position:relative;
   box-shadow:var(--shadow-sm);transition:all .25s;overflow:hidden;cursor:default;
   border:1px solid rgba(255,255,255,.8);}
@@ -477,6 +500,7 @@ tbody tr:last-child td{border-bottom:none;}
   <div class="kpi-toggle on" id="tog5" onclick="toggleKPI(5)">💳 CR Pending Return</div>
   <div class="kpi-toggle on" id="tog6" onclick="toggleKPI(6)">⚠️ CR Pending Support</div>
   <div class="kpi-toggle on" id="tog7" onclick="toggleKPI(7)">🔧 Key Parts Pending Return</div>
+  <div class="kpi-toggle on" id="tog8" onclick="toggleKPI(8)">📋 Parts Pending Support</div>
 </div>
 
 <div class="kpi-grid" id="kpiGrid">
@@ -574,6 +598,36 @@ tbody tr:last-child td{border-bottom:none;}
   <div class="card">
     <div class="card-ttl">Top 8 — Most Pending Return</div>
     <div class="ch-wrap"><canvas id="cTopP"></canvas></div>
+  </div>
+</div>
+
+<!-- KPI 8: PARTS PENDING TO SUPPORT -->
+<div class="kpi8-wrap" id="kpi8" style="margin:0 0 16px;">
+  <div class="kpi8-head">
+    <span class="kpi8-ico">📋</span>
+    <div>
+      <div class="kpi8-title">Parts Pending to Support</div>
+      <div class="kpi8-count" id="k8count">0</div>
+    </div>
+    <div style="margin-left:16px;display:flex;flex-direction:column;gap:3px;">
+      <span id="k8oldest" style="font-size:11px;font-weight:700;color:var(--red)"></span>
+      <span id="k8latest" style="font-size:11px;font-weight:700;color:var(--teal)"></span>
+    </div>
+    <span style="margin-left:auto;font-size:11px;color:var(--gray);font-weight:600;">Edit Remark directly · Click 💾 to save</span>
+  </div>
+  <div style="overflow-x:auto;">
+    <table class="kpi8-tbl">
+      <thead><tr>
+        <th style="width:40px">NO</th>
+        <th>Part Name</th>
+        <th style="width:70px;text-align:center">QTY</th>
+        <th style="width:120px;text-align:center">Oldest (days)</th>
+        <th style="width:120px;text-align:center">Latest (days)</th>
+        <th>Remark</th>
+        <th style="width:90px"></th>
+      </tr></thead>
+      <tbody id="kpi8body"><tr><td colspan="7" style="text-align:center;color:var(--gray);padding:20px">No data available</td></tr></tbody>
+    </table>
   </div>
 </div>
 
@@ -843,7 +897,7 @@ function matchGlobal(dateStr) {
 // ═══════════════════════════════════════════════
 // KPI TOGGLE
 // ═══════════════════════════════════════════════
-const kpiVisible = {0:true,1:true,2:true,3:true,4:true,5:true,6:true,7:true};
+const kpiVisible = {0:true,1:true,2:true,3:true,4:true,5:true,6:true,7:true,8:true};
 
 function toggleSettings(){
   const el=document.getElementById('kpiSettings');
@@ -969,6 +1023,73 @@ function renderKPIs() {
 
   // Update analysis tab
   renderAnalysis(td,tr,net,psCount,prQty,prItems,crDisp,crRet,crPendQty,crPendItems,crPendSup,crOverdue);
+
+  // KPI 8: Parts Pending to Support
+  renderKPI8();
+}
+
+function renderKPI8() {
+  if (!DET) return;
+  const src = DET.pending_support;
+  // Group by part name: sum qty, track oldest & latest date
+  const map = {};
+  src.forEach(r => {
+    const key = (r.part || '—').trim();
+    const d = parseAnyDate(r.date);
+    if (!map[key]) map[key] = { part: key, qty: 0, oldest: null, latest: null };
+    map[key].qty += (r.qty || 0);
+    if (d) {
+      if (!map[key].oldest || d < map[key].oldest) map[key].oldest = d;
+      if (!map[key].latest || d > map[key].latest) map[key].latest = d;
+    }
+  });
+  const rows = Object.values(map).sort((a,b) => b.qty - a.qty);
+  const totalQty = rows.reduce((s,r)=>s+r.qty,0);
+  document.getElementById('k8count').textContent = totalQty.toLocaleString();
+
+  // Overall oldest & latest
+  const allDates = src.map(r=>parseAnyDate(r.date)).filter(Boolean);
+  const overallOldest = allDates.length ? Math.max(...allDates.map(d=>Math.max(0,Math.floor((new Date()-d)/86400000)))) : null;
+  const overallLatest = allDates.length ? Math.min(...allDates.map(d=>Math.max(0,Math.floor((new Date()-d)/86400000)))) : null;
+  const el8o = document.getElementById('k8oldest');
+  const el8l = document.getElementById('k8latest');
+  if (el8o) el8o.textContent = overallOldest !== null ? '🔴 Oldest: ' + overallOldest + ' days' : '';
+  if (el8l) el8l.textContent = overallLatest !== null ? '🟢 Latest: ' + overallLatest + ' days' : '';
+
+  const saved = JSON.parse(localStorage.getItem('kpi8_remarks') || '{}');
+  const tbody = document.getElementById('kpi8body');
+  if (!rows.length) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--gray);padding:20px">No Parts Pending to Support</td></tr>';
+    return;
+  }
+  tbody.innerHTML = rows.map((r, i) => {
+    const rmk = saved[r.part] || '';
+    const safeKey = btoa(unescape(encodeURIComponent(r.part))).replace(/[^a-zA-Z0-9]/g,'_');
+    const oldDays = r.oldest ? Math.max(0,Math.floor((new Date()-r.oldest)/86400000)) : null;
+    const latDays = r.latest ? Math.max(0,Math.floor((new Date()-r.latest)/86400000)) : null;
+    const oldStr = oldDays !== null ? `<span style="font-weight:800;color:${oldDays>14?'var(--red)':'var(--amber)'}">${oldDays} days</span>` : '—';
+    const latStr = latDays !== null ? `<span style="font-weight:700;color:var(--teal)">${latDays} days</span>` : '—';
+    return `<tr>
+      <td style="font-weight:700;color:var(--gray);text-align:center">${i+1}</td>
+      <td style="font-weight:600;color:var(--navy)">${esc(r.part)}</td>
+      <td style="text-align:center;font-weight:800;font-size:15px;color:var(--amber)">${r.qty}</td>
+      <td style="text-align:center">${oldStr}</td>
+      <td style="text-align:center">${latStr}</td>
+      <td><input class="kpi8-remark" id="rmk_${safeKey}" value="${esc(rmk)}" placeholder="Enter remark..."></td>
+      <td><button class="kpi8-save" onclick="saveRemark('${safeKey}','${esc(r.part).replace(/'/g,"\\'")}')">💾 Save</button>
+          <span class="kpi8-saved" id="sv_${safeKey}" style="display:none">✓ Saved</span></td>
+    </tr>`;
+  }).join('');
+}
+
+function saveRemark(safeKey, partName) {
+  const input = document.getElementById('rmk_' + safeKey);
+  if (!input) return;
+  const saved = JSON.parse(localStorage.getItem('kpi8_remarks') || '{}');
+  saved[partName] = input.value;
+  localStorage.setItem('kpi8_remarks', JSON.stringify(saved));
+  const sv = document.getElementById('sv_' + safeKey);
+  if (sv) { sv.style.display='inline'; setTimeout(()=>sv.style.display='none', 2000); }
 }
 
 function setIns(id, badges) {
@@ -2164,21 +2285,15 @@ renderAnalysis = function(td,tr,net,psCount,prQty,prItems,crDisp,crRet,crPendQty
 
 <script>
 // ── LOGIN AUTH ────────────────────────────────────────────
-const UN_HASH = '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918';
-const PW_HASH = 'c8f2d1ce17508fe948637bd352d379881d3735877f9844f103a2b53ff6e9a736';
+const _U = atob('YWRtaW4=');           // admin
+const _P = atob('TWljcm90ZWNAMjAyNg=='); // Microtec@2026
 
-async function sha256(str) {
-  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
-  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
-}
-
-async function doLogin() {
+function doLogin() {
   const u = document.getElementById('loginUser').value.trim();
   const p = document.getElementById('loginPass').value;
   const err = document.getElementById('loginErr');
   if (!u || !p) { err.textContent = 'ກະລຸນາໃສ່ Username ແລ້ວ Password'; return; }
-  const [uh, ph] = await Promise.all([sha256(u), sha256(p)]);
-  if (uh === UN_HASH && ph === PW_HASH) {
+  if (u === _U && p === _P) {
     sessionStorage.setItem('mic_auth','1');
     document.getElementById('loginScreen').classList.add('hidden');
     document.getElementById('mainApp').classList.add('visible');
