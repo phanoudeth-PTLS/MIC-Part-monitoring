@@ -792,7 +792,7 @@ const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyZ5k2eIjpHiK9D
 // ═══ REMARKS SHARED STORAGE (Google Apps Script) ═══
 // ວາງ URL ຂອງ Remarks Apps Script Web App ຂ້າງລຸ່ມນີ້
 // (ເບິ່ງໄຟລ໌ Remarks_GoogleAppsScript.js ສໍາລັບຄູ່ມືຕິດຕັ້ງ)
-const REMARKS_API_URL = 'PASTE_YOUR_REMARKS_API_URL_HERE';
+const REMARKS_API_URL = 'https://script.google.com/macros/s/AKfycbwHf2rkhq2QQyj3kx4nyWdyYL59c5CoIDXkj5JleWNupchJGisVzn9QWrOD2oFsIJF7tA/exec';
 let _kpi8Remarks = {};
 
 async function loadRemarks() {
@@ -1114,7 +1114,7 @@ async function saveRemark(safeKey, partName) {
   // Always update local cache
   _kpi8Remarks[partName] = input.value;
 
-  if (REMARKS_API_URL && REMARKS_API_URL !== 'PASTE_YOUR_REMARKS_API_URL_HERE') {
+  if (REMARKS_API_URL && REMARKS_API_URL !== 'https://script.google.com/macros/s/AKfycbwHf2rkhq2QQyj3kx4nyWdyYL59c5CoIDXkj5JleWNupchJGisVzn9QWrOD2oFsIJF7tA/exec') {
     try {
       await fetch(REMARKS_API_URL, {
         method: 'POST',
