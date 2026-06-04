@@ -27,17 +27,20 @@ body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:var(--offwh);col
 
 /* ═══ HEADER ═══ */
 .hdr{position:sticky;top:0;z-index:100;background:linear-gradient(135deg,var(--navy3) 0%,var(--navy2) 50%,#1a237e 100%);
-  padding:0 28px;height:70px;display:flex;align-items:center;gap:14px;
-  box-shadow:0 4px 24px rgba(0,0,0,.3);border-bottom:1px solid rgba(255,255,255,.08);}
-.logo{background:linear-gradient(135deg,var(--teal),var(--teal2));color:#fff;font-weight:900;
-  font-size:13px;padding:6px 14px;border-radius:8px;letter-spacing:.8px;white-space:nowrap;
-  box-shadow:0 2px 8px rgba(13,148,136,.4);}
-.hdr-title{flex:1;}
-.hdr-title h1{color:#fff;font-size:20px;font-weight:800;letter-spacing:-.3px;}
-.hdr-title p{color:rgba(184,204,240,.75);font-size:12px;margin-top:2px;font-weight:500;}
-.hdr-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
-.btn{padding:8px 16px;border-radius:8px;border:none;cursor:pointer;font-size:13px;font-weight:700;
-  display:inline-flex;align-items:center;gap:6px;transition:all .2s;white-space:nowrap;letter-spacing:.1px;}
+  padding:0 16px;height:56px;display:flex;align-items:center;gap:10px;
+  box-shadow:0 4px 24px rgba(0,0,0,.3);border-bottom:1px solid rgba(255,255,255,.08);
+  overflow:hidden;}
+.logo{display:flex;align-items:center;background:rgba(255,255,255,0.97);
+  padding:5px 10px;border-radius:8px;white-space:nowrap;flex-shrink:0;
+  box-shadow:0 2px 12px rgba(0,0,0,.25);}
+.hdr-title{flex:1;min-width:0;overflow:hidden;}
+.hdr-title h1{color:#fff;font-size:15px;font-weight:800;letter-spacing:-.2px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.hdr-title p{color:rgba(184,204,240,.75);font-size:10.5px;margin-top:1px;font-weight:500;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.hdr-right{display:flex;align-items:center;gap:5px;flex-shrink:0;flex-wrap:nowrap;}
+.btn{padding:6px 11px;border-radius:7px;border:none;cursor:pointer;font-size:11.5px;font-weight:700;
+  display:inline-flex;align-items:center;gap:4px;transition:all .2s;white-space:nowrap;letter-spacing:.1px;}
 .btn-teal{background:linear-gradient(135deg,var(--teal),var(--teal2));color:#fff;box-shadow:0 2px 8px rgba(13,148,136,.35);}
 .btn-teal:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(13,148,136,.5);}
 .btn-navy{background:rgba(255,255,255,.12);color:var(--ice);border:1px solid rgba(255,255,255,.15);backdrop-filter:blur(4px);}
@@ -342,9 +345,13 @@ tbody tr:last-child td{border-bottom:none;}
 <body>
 
 <!-- HEADER -->
-<canvas id="hdrCanvas" style="position:absolute;top:0;left:0;width:100%;height:70px;pointer-events:none;z-index:0;"></canvas>
+<canvas id="hdrCanvas" style="position:absolute;top:0;left:0;width:100%;height:56px;pointer-events:none;z-index:0;"></canvas>
 <div class="hdr" style="position:relative;">
-  <div class="logo">MICROTEC</div>
+  <div class="logo">
+    <img src="https://microtecweb.com/Content/themes/default/images/microtec_logo.png"
+         onerror="this.onerror=null;this.src='https://microtecweb.com/Content/themes/default/images/logo_large.gif';"
+         alt="Microtec" style="height:24px;width:auto;display:block;">
+  </div>
   <div class="hdr-title">
     <h1>BCEL ATM Parts Monitoring Dashboard</h1>
     <p>Real-time overview · ລາຍງານຕິດຕາມອາໄຫ່ລ່ ATM ທະນາຄານ BCEL</p>
@@ -1611,7 +1618,7 @@ function toggleAR(){
   resize();
   window.addEventListener('resize', resize);
   for (let i=0; i<55; i++) pts.push({
-    x: Math.random()*1800, y: Math.random()*70,
+    x: Math.random()*1800, y: Math.random()*56,
     vx: (Math.random()-.5)*.35, vy: (Math.random()-.5)*.25,
     r: Math.random()*1.8+.4,
     a: Math.random()*.45+.08
