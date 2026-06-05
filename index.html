@@ -816,7 +816,7 @@ async function loadRemarks() {
 // ═══════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', () => {
   updateTs();
-  loadRemarks(); // Load shared remarks from Google Sheets (or localStorage fallback)
+  loadRemarks().then(() => renderKPI8()); // reload KPI8 after remarks loaded
   if(APPS_SCRIPT_URL && APPS_SCRIPT_URL !== 'YOUR_APPS_SCRIPT_URL_HERE'){
     loadFromGSheets();
   } else {
@@ -827,7 +827,6 @@ document.addEventListener('DOMContentLoaded', () => {
     renderAll();
     toast('⚠️ กรุณาตั้งค่า APPS_SCRIPT_URL ก่อนใช้งาน');
   }
-});
 
 function populateGlobalYears() {
   const yrs = new Set();
@@ -1052,7 +1051,8 @@ function renderKPIs() {
 
 function renderKPI8() {
   if (!DET) return;
-  const src = DET.pending_support;
+  // Filter out rows already marked as Sent in the sheet
+  const src = DET.pending_support.filter(r => !String(r.remark||'').trim().toLowerCase().startsWith('sent'));
   // Group by part name: sum qty, track oldest & latest date
   const map = {};
   src.forEach(r => {
@@ -1137,6 +1137,7 @@ async function saveRemark(safeKey, partName) {
 
   if (btn) { btn.disabled = false; btn.textContent = '💾 Save'; }
   if (sv) { sv.style.display='inline'; setTimeout(()=>sv.style.display='none', 2000); }
+  renderKPI8(); // refresh count after remark saved
 }
 
 function setIns(id, badges) {
@@ -1656,7 +1657,7 @@ function parseFromArrays(ws2,ws4,ws3,ws5){
   SUMMARY.return_monthly=DET.return_monthly;
   SUMMARY.total_dispatch=Object.values(DET.dispatch_monthly||{}).reduce((a,b)=>a+b,0);
   SUMMARY.total_return=Object.values(DET.return_monthly||{}).reduce((a,b)=>a+b,0);
-  SUMMARY.total_pending_support=DET.pending_support.length;
+  SUMMARY.total_pending_support=DET.pending_support.filter(r=>!String(r.remark||'').trim().toLowerCase().startsWith('sent')).length;
   SUMMARY.total_pending_return_qty=DET.pending_return.reduce((a,r)=>a+r.qty,0);
   SUMMARY.total_pending_return_items=DET.pending_return.length;
   SUMMARY.top_dispatch_parts=DET.top_dispatch_parts;
