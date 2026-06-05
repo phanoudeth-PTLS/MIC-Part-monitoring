@@ -1114,7 +1114,7 @@ async function saveRemark(safeKey, partName) {
   // Always update local cache
   _kpi8Remarks[partName] = input.value;
 
-  if (REMARKS_API_URL && REMARKS_API_URL !== 'https://script.google.com/macros/s/AKfycbwHf2rkhq2QQyj3kx4nyWdyYL59c5CoIDXkj5JleWNupchJGisVzn9QWrOD2oFsIJF7tA/exec') {
+  if (REMARKS_API_URL && REMARKS_API_URL !== 'https://script.google.com/macros/s/AKfycby8dkgM8HbRsyAgKrplggzzaWNtezUBdxin6cEmpnwX-r0vbjf3_rPZvpAV35DDquLL/exec') {
     try {
       await fetch(REMARKS_API_URL, {
         method: 'POST',
