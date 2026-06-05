@@ -792,7 +792,7 @@ const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyZ5k2eIjpHiK9D
 // ═══ REMARKS SHARED STORAGE (Google Apps Script) ═══
 // ວາງ URL ຂອງ Remarks Apps Script Web App ຂ້າງລຸ່ມນີ້
 // (ເບິ່ງໄຟລ໌ Remarks_GoogleAppsScript.js ສໍາລັບຄູ່ມືຕິດຕັ້ງ)
-const REMARKS_API_URL = 'https://script.google.com/macros/s/AKfycbwHf2rkhq2QQyj3kx4nyWdyYL59c5CoIDXkj5JleWNupchJGisVzn9QWrOD2oFsIJF7tA/exec';
+const REMARKS_API_URL = 'https://script.google.com/macros/s/AKfycbyau3Ialg0Zej8IA5XyP0YCLBN8t3QHSTSNItjUeyljksg0bWl2SM49mbSiW-ftg_8Ngg/exec';
 let _kpi8Remarks = {};
 
 async function loadRemarks() {
@@ -1066,7 +1066,9 @@ function renderKPI8() {
     }
   });
   const rows = Object.values(map).sort((a,b) => b.qty - a.qty);
-  const totalQty = rows.reduce((s,r)=>s+r.qty,0);
+  // Exclude rows marked as "sent" from the count
+  const isSent = r => (_kpi8Remarks[r.part] || '').trim().toLowerCase().startsWith('sent');
+  const totalQty = rows.filter(r => !isSent(r)).reduce((s,r)=>s+r.qty,0);
   document.getElementById('k8count').textContent = totalQty.toLocaleString();
 
   // Overall oldest & latest
@@ -1086,15 +1088,18 @@ function renderKPI8() {
   }
   tbody.innerHTML = rows.map((r, i) => {
     const rmk = saved[r.part] || '';
+    const sent = rmk.trim().toLowerCase().startsWith('sent');
+    const rowStyle = sent ? 'background:#f0fdf4;opacity:0.7;' : '';
+    const textStyle = sent ? 'text-decoration:line-through;color:var(--green);' : '';
     const safeKey = btoa(unescape(encodeURIComponent(r.part))).replace(/[^a-zA-Z0-9]/g,'_');
     const oldDays = r.oldest ? Math.max(0,Math.floor((new Date()-r.oldest)/86400000)) : null;
     const latDays = r.latest ? Math.max(0,Math.floor((new Date()-r.latest)/86400000)) : null;
     const oldStr = oldDays !== null ? `<span style="font-weight:800;color:${oldDays>14?'var(--red)':'var(--amber)'}">${oldDays} days</span>` : '—';
     const latStr = latDays !== null ? `<span style="font-weight:700;color:var(--teal)">${latDays} days</span>` : '—';
-    return `<tr>
-      <td style="font-weight:700;color:var(--gray);text-align:center">${i+1}</td>
-      <td style="font-weight:600;color:var(--navy)">${esc(r.part)}</td>
-      <td style="text-align:center;font-weight:800;font-size:15px;color:var(--amber)">${r.qty}</td>
+    return `<tr style="${rowStyle}">
+      <td style="font-weight:700;color:var(--gray);text-align:center;${textStyle}">${i+1}</td>
+      <td style="font-weight:600;color:var(--navy);${textStyle}">${esc(r.part)}</td>
+      <td style="text-align:center;font-weight:800;font-size:15px;color:var(--amber);${textStyle}">${r.qty}</td>
       <td style="text-align:center">${oldStr}</td>
       <td style="text-align:center">${latStr}</td>
       <td><input class="kpi8-remark" id="rmk_${safeKey}" value="${esc(rmk)}" placeholder="Enter remark..."></td>
@@ -1118,6 +1123,7 @@ async function saveRemark(safeKey, partName) {
     try {
       await fetch(REMARKS_API_URL, {
         method: 'POST',
+        mode: 'no-cors',
         body: JSON.stringify({ part: partName, remark: input.value, updatedBy: 'Dashboard' })
       });
     } catch(e) {
