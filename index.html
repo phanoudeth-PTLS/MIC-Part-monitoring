@@ -199,6 +199,13 @@ select.fsel:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgb
 .dl-row{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:500;}
 .dl-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
 
+/* ═══ DETAIL SEARCH PANEL ═══ */
+mark.hl{background:#FDE68A;color:#92400E;border-radius:3px;padding:0 1px;font-weight:700;}
+.f-sel2{padding:7px 10px;border:1.5px solid var(--lgray);border-radius:9px;font-size:12.5px;
+  font-weight:600;color:var(--navy);background:#fff;cursor:pointer;outline:none;max-width:170px;
+  transition:border-color .15s;}
+.f-sel2:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(13,148,136,.12);}
+
 /* ═══ TABS ═══ */
 .tabs{display:flex;gap:4px;border-bottom:2px solid var(--lgray);margin-top:6px;padding:0 2px;}
 .tab{padding:10px 20px;font-size:14px;font-weight:700;border-radius:10px 10px 0 0;
@@ -387,6 +394,491 @@ tbody tr:last-child td{border-bottom:none;}
 .ar-sel:focus{border-color:var(--teal);}
 .ar-sel option{background:#1E2761;color:#fff;}
 
+
+/* ═══════════════════════════════════════════════
+   MODERNIZATION LAYER — BCEL Dashboard v2.1
+   Navy + Gold Professional Theme
+═══════════════════════════════════════════════ */
+
+/* ── Enhanced tokens ── */
+:root {
+  --gold:#C9A84C; --gold2:#E8C96A; --gold-lt:#FDF6E3;
+  --navy-grad: linear-gradient(135deg,#0a1033 0%,#1E2761 60%,#1a237e 100%);
+  --card-border: 1px solid rgba(226,232,240,0.7);
+  --shadow-card: 0 2px 8px rgba(30,39,97,.07), 0 1px 3px rgba(30,39,97,.05);
+  --shadow-hover: 0 8px 28px rgba(30,39,97,.13), 0 3px 8px rgba(30,39,97,.08);
+  --shadow-glow-teal: 0 0 0 3px rgba(13,148,136,.18);
+  --shadow-glow-amber: 0 0 0 3px rgba(245,158,11,.18);
+  --radius:14px; --radius-sm:9px; --radius-lg:18px;
+  --transition: all .22s cubic-bezier(.4,0,.2,1);
+}
+
+/* ── Body background ── */
+body {
+  background: #F1F4FB;
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(30,39,97,.045) 1px, transparent 0);
+  background-size: 28px 28px;
+}
+
+/* ══════════════════════
+   HEADER
+══════════════════════ */
+.hdr {
+  background: var(--navy-grad);
+  box-shadow: 0 4px 32px rgba(0,0,0,.28), inset 0 -1px 0 rgba(255,255,255,.06);
+  height: 60px;
+  border-bottom: 2px solid var(--gold);
+}
+.logo {
+  background: rgba(255,255,255,.96);
+  border-radius: 9px;
+  padding: 5px 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.22), 0 0 0 1px rgba(201,168,76,.3);
+}
+.hdr-title h1 {
+  font-size: 15.5px;
+  font-weight: 900;
+  letter-spacing: -.3px;
+  color: #fff;
+}
+.hdr-title p {
+  color: rgba(201,168,76,.85);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: .3px;
+}
+.live-dot {
+  width: 8px; height: 8px;
+  background: #34d399;
+  box-shadow: 0 0 0 3px rgba(52,211,153,.25);
+}
+#liveWrap { color: #6ee7b7; letter-spacing: .5px; }
+
+/* ── Header buttons ── */
+.btn { border-radius: 8px; font-size: 11.5px; font-weight: 700; letter-spacing: .2px; }
+.btn-teal {
+  background: linear-gradient(135deg,#0D9488,#14b8a6);
+  box-shadow: 0 2px 10px rgba(13,148,136,.4), inset 0 1px 0 rgba(255,255,255,.15);
+}
+.btn-teal:hover { transform: translateY(-1px); box-shadow: 0 5px 18px rgba(13,148,136,.5); }
+.btn-navy {
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.18);
+  backdrop-filter: blur(6px);
+}
+.btn-navy:hover { background: rgba(255,255,255,.18); border-color: rgba(201,168,76,.5); }
+.btn-amber {
+  background: linear-gradient(135deg,#C9A84C,#E8C96A);
+  box-shadow: 0 2px 10px rgba(201,168,76,.4), inset 0 1px 0 rgba(255,255,255,.2);
+  color: #1E2761;
+}
+.btn-amber:hover { transform: translateY(-1px); box-shadow: 0 5px 18px rgba(201,168,76,.5); }
+.btn-red {
+  background: linear-gradient(135deg,#DC2626,#ef4444);
+  box-shadow: 0 2px 10px rgba(220,38,38,.35);
+}
+.btn-red:hover { transform: translateY(-1px); box-shadow: 0 5px 18px rgba(220,38,38,.45); }
+
+/* ══════════════════════
+   GLOBAL FILTER BAR
+══════════════════════ */
+.gbar {
+  background: #fff;
+  border-bottom: 1px solid rgba(226,232,240,.8);
+  padding: 10px 28px;
+  box-shadow: 0 2px 12px rgba(30,39,97,.06);
+  gap: 10px;
+}
+.gbar-lbl {
+  background: linear-gradient(135deg,#e8f0fe,#dbeafe);
+  color: #1d4ed8;
+  border: 1px solid rgba(29,78,216,.15);
+  font-size: 10.5px;
+  letter-spacing: 1.8px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  box-shadow: 0 1px 4px rgba(29,78,216,.1);
+}
+select.fsel {
+  border: 1.5px solid #e2e8f0;
+  border-radius: 9px;
+  padding: 7px 30px 7px 11px;
+  font-size: 12.5px;
+  font-weight: 600;
+  transition: var(--transition);
+  box-shadow: 0 1px 3px rgba(0,0,0,.05);
+}
+select.fsel:focus {
+  border-color: var(--teal);
+  box-shadow: var(--shadow-glow-teal);
+}
+.gbar-info {
+  background: linear-gradient(135deg,#f0fdf4,#dcfce7);
+  color: #15803d;
+  border: 1px solid rgba(21,128,61,.2);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 20px;
+  box-shadow: 0 1px 4px rgba(21,128,61,.1);
+}
+
+/* ══════════════════════
+   SECTION HEADERS
+══════════════════════ */
+.sec {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 2.5px;
+  color: var(--navy);
+  margin: 28px 0 16px;
+  gap: 10px;
+}
+.sec::before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 16px;
+  background: linear-gradient(180deg, var(--gold), var(--amber));
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+.sec::after {
+  background: linear-gradient(to right, rgba(201,168,76,.25), transparent);
+  height: 1.5px;
+}
+
+/* ══════════════════════
+   KPI CARDS
+══════════════════════ */
+.kpi {
+  border-radius: var(--radius);
+  padding: 20px 20px 18px;
+  box-shadow: var(--shadow-card);
+  border: var(--card-border);
+  background: #fff;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+.kpi::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--navy), var(--teal));
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+.kpi:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-hover);
+  border-color: rgba(13,148,136,.2);
+}
+.kpi::after {
+  content: '';
+  position: absolute;
+  bottom: -20px; right: -20px;
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(30,39,97,.04), transparent 70%);
+  pointer-events: none;
+}
+
+/* KPI icon */
+.kpi-icon {
+  width: 42px; height: 42px;
+  border-radius: 11px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  background: linear-gradient(135deg, rgba(30,39,97,.08), rgba(13,148,136,.08));
+  box-shadow: 0 2px 8px rgba(30,39,97,.08);
+  margin-bottom: 12px;
+  flex-shrink: 0;
+}
+
+/* KPI value */
+.kpi .kpi-val, .kpi [id^="kv"] {
+  font-size: 30px !important;
+  font-weight: 900 !important;
+  letter-spacing: -1px;
+  line-height: 1.1;
+}
+
+/* KPI label */
+.kpi .kpi-lbl, .kpi [class*="kpi-lbl"] {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--gray);
+}
+
+/* KPI sub text */
+.kpi small, .kpi .kpi-sub {
+  font-size: 11.5px;
+  color: var(--gray);
+  font-weight: 500;
+}
+
+/* KPI8 — Parts Pending to Support */
+.kpi8-wrap {
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  border: var(--card-border);
+  background: #fff;
+  overflow: hidden;
+  transition: var(--transition);
+}
+.kpi8-wrap::before {
+  content: '';
+  display: block;
+  height: 3px;
+  background: linear-gradient(90deg, var(--amber), var(--gold));
+}
+.kpi8-wrap:hover { box-shadow: var(--shadow-hover); }
+.kpi8-title {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 1.8px;
+  color: var(--gray);
+}
+.kpi8-count {
+  font-size: 34px;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--amber), var(--gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -1px;
+}
+.kpi8-tbl th {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  background: #f8fafc;
+  padding: 8px 10px;
+  color: var(--navy);
+  text-transform: uppercase;
+}
+.kpi8-tbl td { padding: 8px 10px; }
+.kpi8-tbl tr:nth-child(even) td { background: #fafbff; }
+.kpi8-tbl tr:hover td { background: #f0fdf4 !important; transition: background .15s; }
+.kpi8-remark {
+  border: 1.5px solid var(--lgray);
+  border-radius: 7px;
+  padding: 5px 9px;
+  font-size: 12px;
+  transition: var(--transition);
+}
+.kpi8-remark:focus { border-color: var(--amber); box-shadow: var(--shadow-glow-amber); }
+.kpi8-save {
+  border-radius: 7px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 5px 11px;
+  background: linear-gradient(135deg, var(--amber), var(--gold));
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(201,168,76,.35);
+  transition: var(--transition);
+}
+.kpi8-save:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(201,168,76,.5); }
+
+/* ══════════════════════
+   CHARTS
+══════════════════════ */
+.card {
+  border-radius: var(--radius);
+  padding: 22px;
+  box-shadow: var(--shadow-card);
+  border: var(--card-border);
+  background: #fff;
+  transition: var(--transition);
+}
+.card:hover { box-shadow: var(--shadow-hover); }
+.card-title, [class*="chart-title"] {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--navy);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.card-title::before, [class*="chart-title"]::before {
+  content: '';
+  display: inline-block;
+  width: 3px; height: 14px;
+  background: linear-gradient(180deg, var(--gold), var(--amber));
+  border-radius: 3px;
+}
+
+/* ══════════════════════
+   TABS & TABLES
+══════════════════════ */
+.tabs {
+  border-bottom: 2px solid #e2e8f0;
+  gap: 3px;
+  padding: 0 4px;
+}
+.tab {
+  padding: 10px 22px;
+  font-size: 13px;
+  font-weight: 700;
+  border-radius: 10px 10px 0 0;
+  color: var(--gray);
+  transition: var(--transition);
+  letter-spacing: .1px;
+}
+.tab:hover { color: var(--navy); background: rgba(30,39,97,.04); }
+.tab.active {
+  color: var(--navy);
+  background: linear-gradient(180deg, rgba(30,39,97,.06), rgba(13,148,136,.04));
+  border-bottom: 2px solid var(--teal);
+  margin-bottom: -2px;
+}
+
+/* Tables */
+.tbl-wrap { border-radius: var(--radius-sm); overflow: hidden; border: 1px solid #e2e8f0; }
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 13px;
+}
+table thead tr {
+  background: linear-gradient(135deg, var(--navy), #1a237e);
+}
+table thead th {
+  padding: 10px 13px;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.92);
+  white-space: nowrap;
+  border: none;
+}
+table thead th:first-child { border-radius: 0; }
+table tbody tr { transition: background .15s; }
+table tbody tr:nth-child(even) td { background: #f8fafc; }
+table tbody tr:hover td { background: #eff6ff !important; }
+table tbody td {
+  padding: 9px 13px;
+  border-bottom: 1px solid #f1f5f9;
+  color: #334155;
+  vertical-align: middle;
+}
+table tbody tr:last-child td { border-bottom: none; }
+
+/* Badges / status chips */
+.badge, [class*="badge"] {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 9px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .3px;
+}
+
+/* Pager */
+.pager {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  padding: 14px 0 4px;
+  flex-wrap: wrap;
+}
+.pager button {
+  min-width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1.5px solid #e2e8f0;
+  background: #fff;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+  color: var(--navy);
+}
+.pager button:hover { border-color: var(--teal); color: var(--teal); background: #f0fdfa; }
+.pager button.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+
+/* Search box */
+.tbl-toolb input[type=text], .srch-box {
+  border: 1.5px solid #e2e8f0;
+  border-radius: 9px;
+  padding: 7px 12px;
+  font-size: 13px;
+  transition: var(--transition);
+  box-shadow: 0 1px 3px rgba(0,0,0,.04);
+}
+.tbl-toolb input[type=text]:focus, .srch-box:focus {
+  border-color: var(--teal);
+  box-shadow: var(--shadow-glow-teal);
+  outline: none;
+}
+
+/* ══════════════════════
+   KEY PARTS PANEL
+══════════════════════ */
+#keyPartsPanel .card {
+  border-left: 3px solid var(--teal);
+}
+
+/* ══════════════════════
+   ALERT BOX
+══════════════════════ */
+.alert-box {
+  border-radius: var(--radius);
+  border: 1.5px solid #fca5a5;
+  background: linear-gradient(135deg,#fff5f5,#fee2e2);
+  box-shadow: 0 2px 12px rgba(220,38,38,.08);
+}
+
+/* ══════════════════════
+   MODAL / SETTINGS
+══════════════════════ */
+.modal {
+  border-radius: var(--radius-lg);
+  box-shadow: 0 24px 64px rgba(0,0,0,.22);
+  border: 1px solid rgba(226,232,240,.6);
+}
+.modal h3 {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--navy);
+  letter-spacing: -.2px;
+}
+
+/* ══════════════════════
+   SCROLLBAR
+══════════════════════ */
+::-webkit-scrollbar { width: 7px; height: 7px; }
+::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--navy); }
+
+/* ══════════════════════
+   PRINT
+══════════════════════ */
+@media print {
+  body { background: white !important; }
+  .hdr, .gbar, .btn, .tabs { display: none !important; }
+}
+
+/* ══════════════════════
+   RESPONSIVE
+══════════════════════ */
+@media (max-width: 768px) {
+  .main { padding: 16px; }
+  .kpi-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .hdr-title p { display: none; }
+}
+
 </style>
 </head>
 <body>
@@ -567,7 +1059,7 @@ tbody tr:last-child td{border-bottom:none;}
     <canvas id="spark6" height="32" style="width:100%;margin-top:6px;display:block;"></canvas>
     <div class="kpi-insight" id="ins6"></div>
   </div>
-  <!-- KPI 7: Key Parts Pending Return (8 parts combined) -->
+  <!-- KPI 7: Key Parts Pending Return (9 parts combined) -->
   <div class="kpi n" id="kpi7"><div class="kpi-ico">🔧</div>
     <div class="kpi-lbl">Key Parts — Pending Return</div>
     <div class="kpi-num" id="k7">0</div>
@@ -653,10 +1145,17 @@ tbody tr:last-child td{border-bottom:none;}
   <div class="tbl-toolbar">
     <div class="tbl-count">Showing <strong id="c_d">0</strong> of <strong id="t_d">0</strong></div>
     <div class="tbl-filters">
-      <label class="f-lbl">From</label><input type="date" class="f-date" id="d_F" onchange="pg.d=0;render_d()">
-      <label class="f-lbl">To</label><input type="date" class="f-date" id="d_T" onchange="pg.d=0;render_d()">
-      <button class="btn-clear" onclick="clrTab('d');render_d()">✕</button>
-      <input class="srch" id="d_Q" placeholder="🔍 Search…" oninput="pg.d=0;render_d()">
+      <select class="f-sel2" id="d_P" onchange="applyPreset('d',this.value)" title="Quick date range">
+        <option value="">📅 All time</option><option value="today">Today</option>
+        <option value="7d">Last 7 days</option><option value="30d">Last 30 days</option>
+        <option value="tm">This month</option><option value="lm">Last month</option>
+        <option value="ty">This year</option>
+      </select>
+      <select class="f-sel2" id="d_S" onchange="pg.d=0;render_d()" title="Filter by store"><option value="">🏬 All stores</option></select>
+      <label class="f-lbl">From</label><input type="date" class="f-date" id="d_F" onchange="pg.d=0;dP('d');render_d()">
+      <label class="f-lbl">To</label><input type="date" class="f-date" id="d_T" onchange="pg.d=0;dP('d');render_d()">
+      <input class="srch" id="d_Q" placeholder="🔍 Search — ticket, part, serial… (multi-word)" oninput="pg.d=0;render_d()">
+      <button class="btn-clear" onclick="clrTab('d');render_d()" title="Clear all filters">✕ Clear</button>
     </div>
   </div>
   <div class="tbl-wrap"><table>
@@ -672,10 +1171,17 @@ tbody tr:last-child td{border-bottom:none;}
   <div class="tbl-toolbar">
     <div class="tbl-count">Showing <strong id="c_r">0</strong> of <strong id="t_r">0</strong></div>
     <div class="tbl-filters">
-      <label class="f-lbl">From</label><input type="date" class="f-date" id="r_F" onchange="pg.r=0;render_r()">
-      <label class="f-lbl">To</label><input type="date" class="f-date" id="r_T" onchange="pg.r=0;render_r()">
-      <button class="btn-clear" onclick="clrTab('r');render_r()">✕</button>
-      <input class="srch" id="r_Q" placeholder="🔍 Search…" oninput="pg.r=0;render_r()">
+      <select class="f-sel2" id="r_P" onchange="applyPreset('r',this.value)" title="Quick date range">
+        <option value="">📅 All time</option><option value="today">Today</option>
+        <option value="7d">Last 7 days</option><option value="30d">Last 30 days</option>
+        <option value="tm">This month</option><option value="lm">Last month</option>
+        <option value="ty">This year</option>
+      </select>
+      <select class="f-sel2" id="r_S" onchange="pg.r=0;render_r()" title="Filter by store"><option value="">🏬 All stores</option></select>
+      <label class="f-lbl">From</label><input type="date" class="f-date" id="r_F" onchange="pg.r=0;dP('r');render_r()">
+      <label class="f-lbl">To</label><input type="date" class="f-date" id="r_T" onchange="pg.r=0;dP('r');render_r()">
+      <input class="srch" id="r_Q" placeholder="🔍 Search — ticket, part, serial… (multi-word)" oninput="pg.r=0;render_r()">
+      <button class="btn-clear" onclick="clrTab('r');render_r()" title="Clear all filters">✕ Clear</button>
     </div>
   </div>
   <div class="tbl-wrap"><table>
@@ -691,7 +1197,9 @@ tbody tr:last-child td{border-bottom:none;}
   <div class="tbl-toolbar">
     <div class="tbl-count">Showing <strong id="c_ps">0</strong> of <strong id="t_ps">0</strong></div>
     <div class="tbl-filters">
-      <input class="srch" id="ps_Q" placeholder="🔍 Search…" oninput="pg.ps=0;render_ps()">
+      <select class="f-sel2" id="ps_B" onchange="pg.ps=0;render_ps()" title="Filter by branch"><option value="">🏦 All branches</option></select>
+      <input class="srch" id="ps_Q" placeholder="🔍 Search — branch, ATM, part, serial… (multi-word)" oninput="pg.ps=0;render_ps()">
+      <button class="btn-clear" onclick="clrTab('ps');render_ps()" title="Clear all filters">✕ Clear</button>
     </div>
   </div>
   <div class="tbl-wrap"><table>
@@ -707,10 +1215,17 @@ tbody tr:last-child td{border-bottom:none;}
   <div class="tbl-toolbar">
     <div class="tbl-count">Showing <strong id="c_pr">0</strong> of <strong id="t_pr">0</strong></div>
     <div class="tbl-filters">
-      <label class="f-lbl">From</label><input type="date" class="f-date" id="pr_F" onchange="pg.pr=0;render_pr()">
-      <label class="f-lbl">To</label><input type="date" class="f-date" id="pr_T" onchange="pg.pr=0;render_pr()">
-      <button class="btn-clear" onclick="clrTab('pr');render_pr()">✕</button>
-      <input class="srch" id="pr_Q" placeholder="🔍 Search…" oninput="pg.pr=0;render_pr()">
+      <select class="f-sel2" id="pr_P" onchange="applyPreset('pr',this.value)" title="Quick date range">
+        <option value="">📅 All time</option><option value="today">Today</option>
+        <option value="7d">Last 7 days</option><option value="30d">Last 30 days</option>
+        <option value="tm">This month</option><option value="lm">Last month</option>
+        <option value="ty">This year</option>
+      </select>
+      <select class="f-sel2" id="pr_S" onchange="pg.pr=0;render_pr()" title="Filter by store"><option value="">🏬 All stores</option></select>
+      <label class="f-lbl">From</label><input type="date" class="f-date" id="pr_F" onchange="pg.pr=0;dP('pr');render_pr()">
+      <label class="f-lbl">To</label><input type="date" class="f-date" id="pr_T" onchange="pg.pr=0;dP('pr');render_pr()">
+      <input class="srch" id="pr_Q" placeholder="🔍 Search — ticket, part, serial… (multi-word)" oninput="pg.pr=0;render_pr()">
+      <button class="btn-clear" onclick="clrTab('pr');render_pr()" title="Clear all filters">✕ Clear</button>
     </div>
   </div>
   <div class="tbl-wrap"><table>
@@ -983,12 +1498,12 @@ function renderKPIs() {
   anim('k0',td); anim('k1',tr); anim('k2',psCount); anim('k3',prQty);
   anim('k4',crDisp); anim('k5',crPendQty); anim('k6',crPendSup);
 
-  // KPI 7 — Key Parts Pending Return (8 parts combined)
+  // KPI 7 — Key Parts Pending Return (9 parts combined)
   let kp7Qty = 0, kp7Records = 0, kp7Urgent = 0;
   if (DET) {
     const prSrc = (GY||GM) ? DET.pending_return.filter(r=>matchGlobal(r.date)) : DET.pending_return;
     KEY_PARTS.forEach(kp => {
-      const rows = prSrc.filter(r=>(r.part_name||'').toUpperCase().includes(kp.toUpperCase()));
+      const rows = prSrc.filter(r=>kpMatch(r.part_name, kp));
       const q = rows.reduce((s,r)=>s+r.qty,0);
       kp7Qty += q;
       kp7Records += rows.length;
@@ -1146,19 +1661,28 @@ function anim(id,target){
 // ═══════════════════════════════════════════════
 // CHARTS
 // ═══════════════════════════════════════════════
-const COLS=['#1E2761','#0D9488','#F59E0B','#DC2626','#16A34A','#8B5CF6','#EC4899','#0EA5E9','#64748B'];
+const COLS=['#1E2761','#C9A84C','#0D9488','#DC2626','#16A34A','#8B5CF6','#EC4899','#0EA5E9','#64748B'];
+
+// Modern chart global defaults
+Chart.defaults.font.family = "'Inter','Segoe UI',sans-serif";
+Chart.defaults.plugins.tooltip.backgroundColor = 'rgba(15,22,66,0.93)';
+Chart.defaults.plugins.tooltip.titleColor = '#C9A84C';
+Chart.defaults.plugins.tooltip.bodyColor = '#e2e8f0';
+Chart.defaults.plugins.tooltip.padding = 11;
+Chart.defaults.plugins.tooltip.cornerRadius = 9;
+Chart.defaults.plugins.tooltip.boxPadding = 5;
 
 function renderCharts() {
   const dm=fObj(SUMMARY.dispatch_monthly), rm=fObj(SUMMARY.return_monthly);
   const keys=[...new Set([...Object.keys(dm),...Object.keys(rm)])].sort();
   const lbls=keys.map(k=>{const[y,m]=k.split('-');return mn(parseInt(m))+' '+y.slice(2);});
   mkChart('cBar','bar',{labels:lbls,datasets:[
-    {label:'Dispatched',data:keys.map(k=>dm[k]||0),backgroundColor:'#1E2761',borderRadius:6,borderSkipped:false},
-    {label:'Returned',data:keys.map(k=>rm[k]||0),backgroundColor:'#0D9488',borderRadius:6,borderSkipped:false}
+    {label:'Dispatched',data:keys.map(k=>dm[k]||0),backgroundColor:'rgba(30,39,97,0.87)',borderRadius:7,borderSkipped:false,hoverBackgroundColor:'#1E2761'},
+    {label:'Returned',data:keys.map(k=>rm[k]||0),backgroundColor:'rgba(13,148,136,0.82)',borderRadius:7,borderSkipped:false,hoverBackgroundColor:'#0D9488'}
   ]},{responsive:true,maintainAspectRatio:false,
-    scales:{x:{grid:{display:false},ticks:{font:{size:11,weight:'700'}}},
-            y:{grid:{color:'#E2E8F0'},ticks:{callback:v=>v.toLocaleString()}}},
-    plugins:{legend:{position:'bottom',labels:{font:{size:12},padding:14}}}});
+    scales:{x:{grid:{display:false},ticks:{font:{size:11,weight:'700'},color:'#64748B'},border:{display:false}},
+            y:{grid:{color:'rgba(226,232,240,0.7)'},ticks:{callback:v=>v.toLocaleString(),color:'#64748B'},border:{display:false}}},
+    plugins:{legend:{position:'bottom',labels:{font:{size:12,weight:'700'},padding:16,usePointStyle:true,pointStyle:'circle'}}}});
 
   // Pending Return by Category — filter by global year/month if DET loaded
   let grps = SUMMARY.pending_return_groups || {};
@@ -1186,7 +1710,7 @@ function renderCharts() {
   const sh=s=>s.length>30?s.slice(0,28)+'…':s;
   const td8=(SUMMARY.top_dispatch_parts||[]).slice(0,8);
   const tp8=(SUMMARY.top_pending_return_parts||[]).slice(0,8);
-  mkChart('cTopD','bar',{labels:td8.map(d=>sh(d[0])),datasets:[{data:td8.map(d=>d[1]),backgroundColor:'#1E2761',borderRadius:5,borderSkipped:false}]},
+  mkChart('cTopD','bar',{labels:td8.map(d=>sh(d[0])),datasets:[{data:td8.map(d=>d[1]),backgroundColor:'rgba(30,39,97,0.85)',hoverBackgroundColor:'#1E2761',borderRadius:6,borderSkipped:false}]},
     {indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{grid:{color:'#E2E8F0'}},y:{grid:{display:false},ticks:{font:{size:10}}}},plugins:{legend:{display:false}}});
   mkChart('cTopP','bar',{labels:tp8.map(d=>sh(d[0])),datasets:[{data:tp8.map(d=>d[1]),backgroundColor:'#DC2626',borderRadius:5,borderSkipped:false}]},
     {indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{grid:{color:'#E2E8F0'}},y:{grid:{display:false},ticks:{font:{size:10}}}},plugins:{legend:{display:false}}});
@@ -1349,10 +1873,47 @@ function fmtD(s){
 function esc(s){if(s==null)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
 function clrTab(p){
-  const map={d:['d_F','d_T'],r:['r_F','r_T'],pr:['pr_F','pr_T']};
+  const map={d:['d_F','d_T','d_P','d_S','d_Q'],r:['r_F','r_T','r_P','r_S','r_Q'],
+             pr:['pr_F','pr_T','pr_P','pr_S','pr_Q'],ps:['ps_B','ps_Q']};
   (map[p]||[]).forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  const qEl=document.getElementById(p+'_Q'||p==='ps'?'ps_Q':p+'_Q');
-  if(qEl)qEl.value='';
+  pg[p]=0;
+}
+
+// ── Detail search helpers ──
+function dP(p){const el=document.getElementById(p+'_P');if(el)el.value='';}
+function applyPreset(p,v){
+  const F=document.getElementById(p+'_F'),T=document.getElementById(p+'_T');
+  if(!F||!T)return;
+  const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  const now=new Date(); let f='',t='';
+  if(v==='today'){f=t=iso(now);}
+  else if(v==='7d'){const d=new Date(now);d.setDate(d.getDate()-6);f=iso(d);t=iso(now);}
+  else if(v==='30d'){const d=new Date(now);d.setDate(d.getDate()-29);f=iso(d);t=iso(now);}
+  else if(v==='tm'){f=iso(new Date(now.getFullYear(),now.getMonth(),1));t=iso(now);}
+  else if(v==='lm'){f=iso(new Date(now.getFullYear(),now.getMonth()-1,1));t=iso(new Date(now.getFullYear(),now.getMonth(),0));}
+  else if(v==='ty'){f=now.getFullYear()+'-01-01';t=iso(now);}
+  F.value=f;T.value=t;pg[p]=0;window['render_'+p]();
+}
+function qTerms(q){return q?q.split(/\s+/).filter(Boolean):[];}
+function rowHay(r){let s='';for(const k in r){const v=r[k];if(v!=null)s+=' '+String(v);}return s.toLowerCase();}
+let HLRE=null;
+function setHL(terms){HLRE=terms.length
+  ?new RegExp('('+terms.map(t=>t.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')+')','gi')
+  :null;}
+function hesc(s){const e=esc(s);return (HLRE&&e)?e.replace(HLRE,'<mark class="hl">$1</mark>'):e;}
+function populateDetailFilters(){
+  if(!DET)return;
+  const fill=(id,vals)=>{
+    const el=document.getElementById(id); if(!el)return;
+    const cur=el.value, first=el.options[0].outerHTML;
+    const u=[...new Set(vals.filter(Boolean))].sort();
+    el.innerHTML=first+u.map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join('');
+    el.value=u.includes(cur)?cur:'';
+  };
+  fill('d_S',DET.dispatch_rows.map(r=>r.store));
+  fill('r_S',DET.return_rows.map(r=>r.store));
+  fill('pr_S',DET.pending_return.map(r=>r.store));
+  fill('ps_B',DET.pending_support.map(r=>r.branch));
 }
 
 function mkPager(key,total,filtered){
@@ -1381,8 +1942,21 @@ const KEY_PARTS = [
   'S2 SNT TLA ASSY',
   'S2 DISPENSER CONTROL BOARD',
   'S2 F/A CARRIAGE ASSY',
-  'S2 PICK MODULE ASSEMBLY'
+  'S2 PICK MODULE ASSEMBLY',
+  'U- ATM KEYBOARD (EPP4 / For selfserv)'
 ];
+
+// Part names counted as the same key part (matched by any alias)
+const KP_ALIASES = {
+  'U- ATM KEYBOARD (EPP4 / For selfserv)': [
+    'U- ATM KEYBOAD (For selfserv)',
+    'U- ATM KEYBOARD INTERNATIONAL 3 - EPP4'
+  ]
+};
+function kpMatch(name, kp) {
+  const n = (name||'').toUpperCase();
+  return (KP_ALIASES[kp] || [kp]).some(k => n.includes(k.toUpperCase()));
+}
 
 function renderKeyParts() {
   const panel = document.getElementById('keyPartsPanel');
@@ -1396,11 +1970,11 @@ function renderKeyParts() {
 
   const today = new Date(); today.setHours(0,0,0,0);
   const maxQty = Math.max(1, ...KEY_PARTS.map(k2 =>
-    src.filter(r=>(r.part_name||'').toUpperCase().includes(k2.toUpperCase())).reduce((s,r)=>s+r.qty,0)
+    src.filter(r=>kpMatch(r.part_name, k2)).reduce((s,r)=>s+r.qty,0)
   ));
 
   const rows = KEY_PARTS.map((kp, idx) => {
-    const matched = src.filter(r => (r.part_name||'').toUpperCase().includes(kp.toUpperCase()));
+    const matched = src.filter(r => kpMatch(r.part_name, kp));
     const qty    = matched.reduce((s,r)=>s+r.qty, 0);
     const items  = matched.length;
     const stores = [...new Set(matched.map(r=>r.store).filter(Boolean))].slice(0,3).join(', ') || '—';
@@ -1443,7 +2017,7 @@ function renderKeyParts() {
   });
 
   const total = KEY_PARTS.reduce((s, kp) => {
-    return s + src.filter(r=>(r.part_name||'').toUpperCase().includes(kp.toUpperCase())).reduce((a,r)=>a+r.qty,0);
+    return s + src.filter(r=>kpMatch(r.part_name, kp)).reduce((a,r)=>a+r.qty,0);
   }, 0);
 
   panel.innerHTML = `
@@ -1477,44 +2051,48 @@ function renderKeyParts() {
 // ═══════════════════════════════════════════════
 // RENDER TABLES
 // ═══════════════════════════════════════════════
-function renderAll(){render_d();render_r();render_ps();render_pr();}
+function renderAll(){populateDetailFilters();render_d();render_r();render_ps();render_pr();}
 
 function render_d(){
-  const all=DET?DET.dispatch_rows:[], fF=gv('d_F'),fT=gv('d_T'),q=gs('d_Q');
+  const all=DET?DET.dispatch_rows:[], fF=gv('d_F'),fT=gv('d_T'),q=gs('d_Q'),st=gv('d_S');
+  const terms=qTerms(q); setHL(terms);
   const rows=all.filter(r=>{
     if(!inRange(r.date,fF,fT,GY,GM))return false;
-    if(q&&!JSON.stringify(r).toLowerCase().includes(q))return false;
+    if(st&&(r.store||'')!==st)return false;
+    if(terms.length){const hay=rowHay(r);if(!terms.every(t=>hay.includes(t)))return false;}
     return true;
   });
   document.getElementById('c_d').textContent=rows.length.toLocaleString();
   document.getElementById('t_d').textContent=all.length.toLocaleString();
   const sl=rows.slice(pg.d*PS,(pg.d+1)*PS);
   document.getElementById('b_d').innerHTML=sl.length?sl.map(r=>
-    `<tr><td class="ell">${esc(r.ticket)}</td><td style="white-space:nowrap">${fmtD(r.date)}</td>
-     <td>${esc(r.serial)||'—'}</td><td>${esc(r.part_code)||'—'}</td>
-     <td class="ell" style="max-width:200px">${esc(r.part_name)}</td>
-     <td><span class="pill p-t">${esc(r.store)||'—'}</span></td>
-     <td class="num">${r.qty||0}</td><td>${esc(r.purpose)||'—'}</td>
-     <td class="ell">${esc(r.receiver)||'—'}</td></tr>`).join(''):noRows('No dispatch records');
+    `<tr><td class="ell">${hesc(r.ticket)}</td><td style="white-space:nowrap">${fmtD(r.date)}</td>
+     <td>${hesc(r.serial)||'—'}</td><td>${hesc(r.part_code)||'—'}</td>
+     <td class="ell" style="max-width:200px">${hesc(r.part_name)}</td>
+     <td><span class="pill p-t">${hesc(r.store)||'—'}</span></td>
+     <td class="num">${r.qty||0}</td><td>${hesc(r.purpose)||'—'}</td>
+     <td class="ell">${hesc(r.receiver)||'—'}</td></tr>`).join(''):noRows('No dispatch records');
   mkPager('d',all.length,rows.length);
 }
 
 function render_r(){
-  const all=DET?DET.return_rows:[], fF=gv('r_F'),fT=gv('r_T'),q=gs('r_Q');
+  const all=DET?DET.return_rows:[], fF=gv('r_F'),fT=gv('r_T'),q=gs('r_Q'),st=gv('r_S');
+  const terms=qTerms(q); setHL(terms);
   const rows=all.filter(r=>{
     if(!inRange(r.date,fF,fT,GY,GM))return false;
-    if(q&&!JSON.stringify(r).toLowerCase().includes(q))return false;
+    if(st&&(r.store||'')!==st)return false;
+    if(terms.length){const hay=rowHay(r);if(!terms.every(t=>hay.includes(t)))return false;}
     return true;
   });
   document.getElementById('c_r').textContent=rows.length.toLocaleString();
   document.getElementById('t_r').textContent=all.length.toLocaleString();
   const sl=rows.slice(pg.r*PS,(pg.r+1)*PS);
   document.getElementById('b_r').innerHTML=sl.length?sl.map(r=>
-    `<tr><td class="ell">${esc(r.ticket)}</td><td style="white-space:nowrap">${fmtD(r.date)}</td>
-     <td class="ell">${esc(r.from)||'—'}</td><td>${esc(r.part_code)||'—'}</td>
-     <td class="ell" style="max-width:200px">${esc(r.part_name)}</td>
-     <td><span class="pill p-t">${esc(r.store)||'—'}</span></td>
-     <td class="num">${r.qty||0}</td><td>${esc(r.purpose)||'—'}</td></tr>`).join(''):noRows('No return records');
+    `<tr><td class="ell">${hesc(r.ticket)}</td><td style="white-space:nowrap">${fmtD(r.date)}</td>
+     <td class="ell">${hesc(r.from)||'—'}</td><td>${hesc(r.part_code)||'—'}</td>
+     <td class="ell" style="max-width:200px">${hesc(r.part_name)}</td>
+     <td><span class="pill p-t">${hesc(r.store)||'—'}</span></td>
+     <td class="num">${r.qty||0}</td><td>${hesc(r.purpose)||'—'}</td></tr>`).join(''):noRows('No return records');
   mkPager('r',all.length,rows.length);
 }
 
@@ -1533,8 +2111,13 @@ function daysCell(days) {
 }
 
 function render_ps(){
-  const all=DET?DET.pending_support:[], q=gs('ps_Q');
-  const rows=all.filter(r=>{if(q&&!JSON.stringify(r).toLowerCase().includes(q))return false;return true;});
+  const all=DET?DET.pending_support:[], q=gs('ps_Q'),br=gv('ps_B');
+  const terms=qTerms(q); setHL(terms);
+  const rows=all.filter(r=>{
+    if(br&&(r.branch||'')!==br)return false;
+    if(terms.length){const hay=rowHay(r);if(!terms.every(t=>hay.includes(t)))return false;}
+    return true;
+  });
   // Sort by days waiting descending (longest wait first)
   rows.sort((a,b)=>(daysWaiting(b.date)||0)-(daysWaiting(a.date)||0));
   document.getElementById('c_ps').textContent=rows.length.toLocaleString();
@@ -1542,35 +2125,37 @@ function render_ps(){
   const sl=rows.slice(pg.ps*PS,(pg.ps+1)*PS);
   document.getElementById('b_ps').innerHTML=sl.length?sl.map(r=>{
     const days=daysWaiting(r.date);
-    return `<tr><td>${esc(r.no)}</td><td style="white-space:nowrap">${esc(r.date)||'—'}</td>
+    return `<tr><td>${hesc(r.no)}</td><td style="white-space:nowrap">${hesc(r.date)||'—'}</td>
      ${daysCell(days)}
-     <td>${esc(r.ref)||'—'}</td><td class="ell">${esc(r.branch)||'—'}</td>
-     <td>${esc(r.atm_type)||'—'}</td><td>${esc(r.serial)||'—'}</td>
-     <td class="ell" style="max-width:200px">${esc(r.part)||'—'}</td>
+     <td>${hesc(r.ref)||'—'}</td><td class="ell">${hesc(r.branch)||'—'}</td>
+     <td>${hesc(r.atm_type)||'—'}</td><td>${hesc(r.serial)||'—'}</td>
+     <td class="ell" style="max-width:200px">${hesc(r.part)||'—'}</td>
      <td class="num">${r.qty||0}</td>
-     <td><span class="pill p-a">${esc(r.remark)||'Pending'}</span></td></tr>`;
+     <td><span class="pill p-a">${hesc(r.remark)||'Pending'}</span></td></tr>`;
   }).join(''):noRows('No pending support records');
   mkPager('ps',all.length,rows.length);
 }
 
 function render_pr(){
-  const all=DET?DET.pending_return:[], fF=gv('pr_F'),fT=gv('pr_T'),q=gs('pr_Q');
+  const all=DET?DET.pending_return:[], fF=gv('pr_F'),fT=gv('pr_T'),q=gs('pr_Q'),st=gv('pr_S');
+  const terms=qTerms(q); setHL(terms);
   const rows=all.filter(r=>{
     if(!inRange(r.date,fF,fT,GY,GM))return false;
-    if(q&&!JSON.stringify(r).toLowerCase().includes(q))return false;
+    if(st&&(r.store||'')!==st)return false;
+    if(terms.length){const hay=rowHay(r);if(!terms.every(t=>hay.includes(t)))return false;}
     return true;
   });
   document.getElementById('c_pr').textContent=rows.length.toLocaleString();
   document.getElementById('t_pr').textContent=all.length.toLocaleString();
   const sl=rows.slice(pg.pr*PS,(pg.pr+1)*PS);
   document.getElementById('b_pr').innerHTML=sl.length?sl.map(r=>
-    `<tr><td class="ell">${esc(r.sender)||'—'}</td><td>${esc(r.part_code)||'—'}</td>
-     <td class="ell" style="max-width:180px">${esc(r.part_name)}</td>
+    `<tr><td class="ell">${hesc(r.sender)||'—'}</td><td>${hesc(r.part_code)||'—'}</td>
+     <td class="ell" style="max-width:180px">${hesc(r.part_name)}</td>
      <td style="white-space:nowrap">${fmtD(r.date)}</td>
-     <td class="num">${r.qty||0}</td><td>${esc(r.serial)||'—'}</td>
-     <td class="ell" style="max-width:150px">${esc(r.address)||'—'}</td>
-     <td>${esc(r.store)||'—'}</td>
-     <td><span class="pill p-a">${esc(r.part_group)||'—'}</span></td></tr>`).join(''):noRows('No pending return records');
+     <td class="num">${r.qty||0}</td><td>${hesc(r.serial)||'—'}</td>
+     <td class="ell" style="max-width:150px">${hesc(r.address)||'—'}</td>
+     <td>${hesc(r.store)||'—'}</td>
+     <td><span class="pill p-a">${hesc(r.part_group)||'—'}</span></td></tr>`).join(''):noRows('No pending return records');
   mkPager('pr',all.length,rows.length);
 }
 
